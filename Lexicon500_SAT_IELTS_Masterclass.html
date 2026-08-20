@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lexicon 500: Dual SAT & IELTS Academic Masterclass</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{ --ink:#1e2433; }
+  html,body{ font-family:'Inter',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  .font-serif-display{ font-family:'Lora',Georgia,serif; }
+  ::-webkit-scrollbar{ height:8px; width:8px; }
+  ::-webkit-scrollbar-thumb{ background:#c7cedb; border-radius:8px; }
+  ::-webkit-scrollbar-track{ background:transparent; }
+  .tab-scroll{ scrollbar-width:thin; }
+  .fade-in{ animation:fadeIn .28s ease both; }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+  .flip-scene{ perspective:1600px; }
+  .flip-card{ position:relative; width:100%; height:100%; transition:transform .55s cubic-bezier(.4,.2,.2,1); transform-style:preserve-3d; }
+  .flip-card.flipped{ transform:rotateY(180deg); }
+  .flip-face{ position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:1.25rem; }
+  .flip-back{ transform:rotateY(180deg); }
+  .word-chip{ transition:all .15s ease; }
+  .word-chip:hover{ transform:translateY(-1px); }
+  .quiz-option{ transition:all .15s ease; }
+  .progress-fill{ transition:width .4s ease; }
+  .tab-btn{ transition:all .15s ease; white-space:nowrap; }
+  input[type="checkbox"].mastery-check{ accent-color:#0f766e; }
+</style>
+</head>
+<body class="bg-[#f6f7fb] text-slate-800 min-h-screen">
+
+<header class="bg-gradient-to-br from-slate-900 via-slate-800 to-teal-900 text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+      <div>
+        <p class="text-teal-300 text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase mb-2">SAT &bull; IELTS Academic &bull; 500 Words</p>
+        <h1 class="font-serif-display text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight">Lexicon 500</h1>
+        <p class="text-slate-300 mt-2 max-w-2xl text-sm sm:text-base">The ultimate 500-word bridge to mastering advanced academic vocabulary for elite scores &mdash; Dual SAT &amp; IELTS Academic Masterclass.</p>
+      </div>
+      <div id="global-progress" class="bg-white/10 backdrop-blur rounded-2xl px-5 py-4 w-full lg:w-72 border border-white/10">
+        <div class="flex items-center justify-between text-xs text-slate-300 mb-1">
+          <span>Overall Mastery</span>
+          <span id="global-progress-label">0 / 500</span>
+        </div>
+        <div class="w-full h-2.5 bg-white/15 rounded-full overflow-hidden">
+          <div id="global-progress-bar" class="progress-fill h-full bg-teal-400 rounded-full" style="width:0%"></div>
+        </div>
+        <button id="reset-progress-btn" class="mt-3 text-[11px] text-slate-300 hover:text-white underline underline-offset-2">Reset all progress</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+  <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+    <div id="tab-container" class="flex gap-1.5 overflow-x-auto tab-scroll py-3"></div>
+  </div>
+</nav>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+  <div class="flex flex-col gap-4 mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div>
+        <h2 id="section-title" class="font-serif-display text-xl sm:text-2xl font-semibold text-slate-900"></h2>
+        <p id="section-progress-label" class="text-sm text-slate-500 mt-0.5"></p>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="relative">
+          <input id="search-input" type="text" placeholder="Search this section..." class="w-full sm:w-56 pl-9 pr-3 py-2 text-sm rounded-full border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-500/40 focus:border-teal-500 bg-white">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="m21 21-4.3-4.3"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+      <div id="section-progress-bar" class="progress-fill h-full bg-indigo-500 rounded-full" style="width:0%"></div>
+    </div>
+
+    <div id="mode-tabs" class="inline-flex bg-slate-100 rounded-xl p-1 gap-1 self-start">
+      <button data-mode="study" class="mode-btn px-4 py-2 text-sm font-semibold rounded-lg transition">📖 Study Table</button>
+      <button data-mode="flash" class="mode-btn px-4 py-2 text-sm font-semibold rounded-lg transition">🃏 Flashcards</button>
+      <button data-mode="quiz" class="mode-btn px-4 py-2 text-sm font-semibold rounded-lg transition">✅ Quiz</button>
+    </div>
+  </div>
+
+  <section id="study-view"></section>
+  <section id="flash-view" class="hidden"></section>
+  <section id="quiz-view" class="hidden"></section>
+
+</main>
+
+<footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 pt-4 text-center text-xs text-slate-400">
+  Lexicon 500 &middot; Built for dual SAT &amp; IELTS Academic preparation &middot; Progress is saved automatically in this browser.
+</footer>
+
+<script>
+const VOCAB_RAW = [
+[1,"abstruse","adj.","/əb-STROOS/","Difficult to understand; obscure and needlessly complex.","The professor's abstruse explanation of quantum theory left most of the class more confused than before.","esoteric,arcane,recondite","lucid,clear,straightforward","çapraşık, anlaşılması güç"],
+[1,"acumen","n.","/AK-yuh-muhn/","Keen insight and sound judgment, especially in a practical matter.","Her business acumen allowed the small startup to outmaneuver much larger competitors.","shrewdness,discernment,perspicacity","ineptitude,obtuseness,folly","keskin kavrayış, muhakeme yeteneği"],
+[1,"ambiguous","adj.","/am-BIG-yoo-uhs/","Open to more than one interpretation; not clearly defined.","The wording of the contract was so ambiguous that both parties claimed to have won the dispute.","equivocal,vague,unclear","unambiguous,explicit,definite","belirsiz, çok anlamlı"],
+[1,"analogous","adj.","/uh-NAL-uh-guhs/","Comparable in certain respects to something else, typically for the purpose of explanation.","The examiner argued that the spread of misinformation online is analogous to the spread of a virus.","comparable,parallel,akin","dissimilar,unrelated,disparate","benzer, andıran"],
+[1,"anomaly","n.","/uh-NOM-uh-lee/","Something that deviates from what is standard, normal, or expected.","The unusually cold summer was treated as a statistical anomaly rather than proof of a trend.","irregularity,deviation,aberration","norm,regularity,standard","anomali, sapma"],
+[1,"antithesis","n.","/an-TITH-uh-sis/","The direct opposite of something.","Her calm, measured response was the antithesis of the panic that had gripped the rest of the room.","opposite,converse,reverse","equivalent,counterpart,likeness","tam zıddı"],
+[1,"apt","adj.","/apt/","Appropriate or suitable in the circumstances.","The critic found 'labyrinthine' an apt description of the novel's tangled plot.","fitting,suitable,pertinent","inappropriate,unsuitable,inapt","yerinde, uygun"],
+[1,"arbitrary","adj.","/AHR-bi-trer-ee/","Based on random choice or personal whim rather than reason or system.","Critics argued that the committee's cutoff score was entirely arbitrary and unsupported by data.","capricious,random,subjective","reasoned,systematic,principled","keyfi"],
+[1,"articulate","adj.","/ahr-TIK-yuh-lit/","Able to express ideas clearly and effectively.","Even under hostile questioning, the witness remained articulate and precise.","eloquent,fluent,expressive","inarticulate,incoherent,halting","açık ve akıcı ifade eden"],
+[1,"assert","v.","/uh-SURT/","To state a fact or belief confidently and forcefully.","The report asserts that the reform will cut costs, though it offers little supporting evidence.","declare,affirm,contend","deny,refute,retract","iddia etmek, ileri sürmek"],
+[1,"cogent","adj.","/KOH-juhnt/","Clear, logical, and convincing.","She presented a cogent argument for restructuring the department's budget.","compelling,persuasive,sound","unconvincing,weak,specious","ikna edici, mantıklı"],
+[1,"coherent","adj.","/koh-HEER-uhnt/","Logical and consistent; forming a unified whole.","The thesis lacked a coherent structure, jumping between unrelated claims.","consistent,logical,unified","incoherent,disjointed,disorganized","tutarlı"],
+[1,"concur","v.","/kuhn-KUR/","To agree or be of the same opinion.","Most economists concur that the policy will have only a modest short-term effect.","agree,coincide,assent","disagree,dissent,object","hemfikir olmak"],
+[1,"conjecture","n.","/kuhn-JEK-chur/","An opinion or conclusion formed on the basis of incomplete information.","Without excavation records, historians can only offer conjecture about the site's original purpose.","speculation,guess,supposition","fact,certainty,proof","tahmin, varsayım"],
+[1,"contend","v.","/kuhn-TEND/","To assert something as a position in an argument; to compete for something.","The author contends that inequality, not technology, drives most modern political unrest.","argue,maintain,assert","concede,abandon,yield","iddia etmek, savunmak"],
+[1,"corroborate","v.","/kuh-ROB-uh-reyt/","To confirm or give support to a statement or theory.","Two independent studies corroborated the initial findings on the drug's side effects.","confirm,substantiate,validate","contradict,refute,undermine","doğrulamak, teyit etmek"],
+[1,"credible","adj.","/KRED-uh-buhl/","Able to be believed; convincing.","The journalist refused to publish the claim until she found a credible source to confirm it.","believable,plausible,convincing","implausible,dubious,incredible","inandırıcı, güvenilir"],
+[1,"deduce","v.","/dih-DOOS/","To reach a conclusion by reasoning from known facts.","From the fragments alone, the archaeologist deduced that the vessel had been used for storing grain.","infer,conclude,reason","assume (baselessly),guess","çıkarım yapmak"],
+[1,"discern","v.","/dih-SURN/","To perceive or recognize something, often with difficulty.","It was hard to discern any clear pattern in the scattered data points.","perceive,distinguish,detect","overlook,miss,ignore","fark etmek, ayırt etmek"],
+[1,"discrepancy","n.","/dih-SKREP-uhn-see/","A lack of agreement or consistency between facts or figures.","Auditors flagged a significant discrepancy between the reported and actual expenses.","inconsistency,disparity,variance","agreement,consistency,correspondence","tutarsızlık, fark"],
+[1,"dubious","adj.","/DOO-bee-uhs/","Not to be relied upon; of doubtful quality or origin.","The salesman's dubious claims about the product's effectiveness were never independently verified.","questionable,doubtful,suspect","certain,reliable,unquestionable","şüpheli"],
+[1,"elucidate","v.","/ih-LOO-si-deyt/","To make something clear; to explain.","The professor used a simple diagram to elucidate an otherwise confusing proof.","clarify,explain,illuminate","obscure,confuse,muddle","açıklığa kavuşturmak"],
+[1,"empirical","adj.","/em-PIR-i-kuhl/","Based on observation or experiment rather than theory alone.","The paper relies on empirical evidence gathered from three decades of field surveys.","observed,experimental,factual","theoretical,speculative,hypothetical","deneysel, gözleme dayalı"],
+[1,"equivocal","adj.","/ih-KWIV-uh-kuhl/","Open to two or more interpretations, often deliberately so.","The politician's equivocal answer left reporters unsure of her actual position.","ambiguous,vague,evasive","unequivocal,clear,definite","muğlak, iki anlamlı"],
+[1,"explicit","adj.","/ik-SPLIS-it/","Stated clearly and in detail, leaving no room for confusion.","The instructions were explicit about which documents the application required.","clear,unambiguous,direct","implicit,vague,ambiguous","açık, net"],
+[1,"extrapolate","v.","/ik-STRAP-uh-leyt/","To estimate or conclude by extending known information to an unknown situation.","Analysts extrapolated future sales figures from the previous quarter's growth rate.","infer,project,generalize","interpolate (contrast)","verilerden tahminde bulunmak"],
+[1,"fallacy","n.","/FAL-uh-see/","A mistaken belief, especially one based on unsound reasoning.","The argument rests on the common fallacy that correlation implies causation.","misconception,error,delusion","truth,fact,verity","yanılgı, mantık hatası"],
+[1,"hypothesis","n.","/hy-POTH-uh-sis/","A proposed explanation made as a starting point for further investigation.","The researchers designed an experiment to test their hypothesis about sleep and memory.","theory,proposition,premise","fact,conclusion,certainty","hipotez, varsayım"],
+[1,"implicit","adj.","/im-PLIS-it/","Suggested though not directly expressed; implied.","There was an implicit assumption in the report that costs would remain stable.","implied,tacit,unspoken","explicit,stated,overt","örtük, üstü kapalı"],
+[1,"inconclusive","adj.","/in-kuhn-KLOO-siv/","Not leading to a firm conclusion; not decisive.","The trial results were inconclusive, prompting calls for a larger follow-up study.","unresolved,uncertain,indecisive","conclusive,definitive,decisive","sonuca varılamayan"],
+[1,"incongruous","adj.","/in-KONG-groo-uhs/","Strikingly out of place or inconsistent with its surroundings.","The gleaming skyscraper looked incongruous beside the centuries-old cathedral.","inconsistent,out of place,discordant","fitting,consistent,harmonious","uyumsuz"],
+[1,"inductive","adj.","/in-DUHK-tiv/","Reasoning that derives general principles from specific observations.","Her inductive approach began with individual case studies before proposing a broader theory.","empirical,evidence-based","deductive","tümevarımsal"],
+[1,"infer","v.","/in-FUR/","To deduce or conclude information from evidence and reasoning.","From her tone, we could infer that the meeting had not gone well.","deduce,conclude,surmise","state,declare explicitly","çıkarım yapmak"],
+[1,"inherent","adj.","/in-HEER-uhnt/","Existing as a natural or essential part of something.","Risk is inherent in any investment, no matter how carefully it is managed.","intrinsic,innate,built-in","extrinsic,acquired,external","doğasında olan, içkin"],
+[1,"lucid","adj.","/LOO-sid/","Expressed clearly; easy to understand.","Despite the topic's complexity, her lucid writing made the argument accessible to a general audience.","clear,coherent,intelligible","obscure,murky,confusing","açık, anlaşılır"],
+[1,"nuance","n.","/NOO-ahns/","A subtle difference in meaning, expression, or feeling.","Translating poetry requires capturing every nuance of the original language.","subtlety,shade,gradation","bluntness (contrast)","nüans, ince ayrım"],
+[1,"objective","adj.","/uhb-JEK-tiv/","Not influenced by personal feelings or opinions; based on facts.","Peer review is meant to provide an objective assessment of a study's methodology.","impartial,unbiased,neutral","subjective,biased,partial","tarafsız, nesnel"],
+[1,"paradox","n.","/PAR-uh-doks/","A statement or situation that seems self-contradictory yet may be true.","It is a paradox that the safest cars sometimes make drivers take greater risks.","contradiction,anomaly,incongruity","consistency,certainty","paradoks, çelişki"],
+[1,"plausible","adj.","/PLAW-zuh-buhl/","Seeming reasonable or probable.","The detective offered a plausible explanation for the missing evidence, though it remained unconfirmed.","credible,believable,reasonable","implausible,unlikely,far-fetched","akla yatkın, makul"],
+[1,"postulate","v.","/POS-chuh-leyt/","To suggest or assume the existence of something as a basis for reasoning.","Einstein postulated that the speed of light is constant for all observers.","assume,propose,hypothesize","prove,verify,disprove","varsaymak, öne sürmek"],
+[1,"presume","v.","/prih-ZOOM/","To suppose that something is true without proof.","The committee presumed the applicant's innocence until the evidence proved otherwise.","assume,suppose,surmise","know,verify,confirm","varsaymak, farz etmek"],
+[1,"rational","adj.","/RASH-uh-nuhl/","Based on reason or logic rather than emotion.","A rational approach to the crisis required setting aside political loyalties.","logical,sensible,reasoned","irrational,illogical,emotional","akılcı, mantıklı"],
+[1,"refute","v.","/rih-FYOOT/","To prove a statement or theory to be wrong or false.","New fossil evidence refuted the long-held assumption about the species' extinction date.","disprove,rebut,contradict","confirm,prove,corroborate","çürütmek"],
+[1,"salient","adj.","/SEY-lee-uhnt/","Most noticeable or important; prominent.","The report's most salient finding was the sharp decline in youth employment.","prominent,notable,conspicuous","minor,insignificant,trivial","göze çarpan, önemli"],
+[1,"skeptical","adj.","/SKEP-ti-kuhl/","Not easily convinced; having doubts about a claim.","Investors remained skeptical of the startup's ambitious growth projections.","doubtful,dubious,incredulous","credulous,trusting,convinced","şüpheci"],
+[1,"speculative","adj.","/SPEK-yuh-luh-tiv/","Based on conjecture rather than knowledge; involving guesswork.","Much of the article's forecast is speculative, resting on assumptions that may not hold.","conjectural,theoretical,hypothetical","factual,proven,certain","spekülatif, varsayıma dayalı"],
+[1,"substantiate","v.","/suhb-STAN-shee-eyt/","To provide evidence to support or prove a claim.","The company could not substantiate its advertising claims when challenged by regulators.","verify,confirm,corroborate","disprove,refute,undermine","kanıtlarla desteklemek"],
+[1,"tenuous","adj.","/TEN-yoo-uhs/","Very weak or slight; barely sufficient.","The prosecution's case rested on a tenuous link between the suspect and the crime scene.","weak,flimsy,shaky","strong,solid,robust","zayıf, dayanıksız"],
+[1,"valid","adj.","/VAL-id/","Well-grounded, sound, or logically correct.","The judge ruled that the contract was legally valid despite the missing signature.","sound,legitimate,well-founded","invalid,unfounded,baseless","geçerli"],
+[1,"vindicate","v.","/VIN-di-keyt/","To clear someone of blame or suspicion; to prove something to be right.","Decades later, new evidence finally vindicated the scientist's controversial theory.","exonerate,justify,absolve","condemn,incriminate,discredit","haklı çıkarmak, temize çıkarmak"],
+[2,"acrimonious","adj.","/ak-ruh-MOH-nee-uhs/","Bitter, angry, and full of resentment, especially in speech or dispute.","The merger talks collapsed after an acrimonious exchange between the two CEOs.","bitter,rancorous,caustic","amicable,cordial,friendly","sert ve kırıcı (tartışma)"],
+[2,"allude","v.","/uh-LOOD/","To refer to something indirectly rather than mention it explicitly.","The senator alluded to the scandal without ever naming those involved.","hint,imply,suggest","state directly,declare","ima etmek, dolaylı değinmek"],
+[2,"anecdote","n.","/AN-ik-doht/","A short, personal account of an incident, often used to illustrate a point.","The lecturer opened with an anecdote about her first failed experiment.","story,account,vignette","(no direct antonym)","anekdot, kısa öykü"],
+[2,"bombastic","adj.","/bom-BAS-tik/","High-sounding but with little meaning; inflated or pompous in language.","Critics dismissed the CEO's bombastic promises as pure marketing.","pompous,grandiloquent,pretentious","understated,modest,plain","tumturaklı, abartılı"],
+[2,"candor","n.","/KAN-dor/","The quality of being open and honest in expression.","Voters responded well to the candidate's unusual candor about the program's costs.","frankness,honesty,openness","deceit,evasiveness,duplicity","açık sözlülük, dürüstlük"],
+[2,"circumlocution","n.","/sur-kuhm-loh-KYOO-shuhn/","The use of many words where fewer would do, often to avoid saying something directly.","His answer was pure circumlocution, dancing around the question of blame.","wordiness,evasion,periphrasis","directness,conciseness","dolambaçlı anlatım"],
+[2,"colloquial","adj.","/kuh-LOH-kwee-uhl/","Used in ordinary or familiar conversation rather than formal speech or writing.","The essay lost points for slipping into colloquial phrasing unsuited to an academic tone.","informal,conversational,vernacular","formal,literary,academic","günlük konuşma diline özgü"],
+[2,"concise","adj.","/kuhn-SAHYS/","Giving a lot of information clearly and in a few words.","IELTS Task 1 rewards a concise overview rather than a description of every data point.","succinct,terse,brief","verbose,long-winded,wordy","kısa ve öz"],
+[2,"condescending","adj.","/kon-dih-SEN-ding/","Showing an attitude of patronizing superiority.","Reviewers found the manual's condescending tone off-putting for experienced users.","patronizing,disdainful,superior","respectful,humble,gracious","küçümseyici, tepeden bakan"],
+[2,"connotation","n.","/kon-uh-TEY-shuhn/","An idea or feeling that a word invokes beyond its literal meaning.","'Frugal' and 'stingy' share a denotation but carry very different connotations.","implication,undertone,overtone","denotation (literal meaning)","yan anlam, çağrışım"],
+[2,"contentious","adj.","/kuhn-TEN-shuhs/","Causing or likely to cause argument; controversial.","Immigration policy remains one of the most contentious issues in the debate.","controversial,divisive,disputed","uncontroversial,agreed,settled","tartışmalı, ihtilaflı"],
+[2,"convoluted","adj.","/KON-vuh-loo-tid/","Extremely complex and difficult to follow.","The legal document's convoluted phrasing confused even the lawyers reviewing it.","complicated,intricate,tangled","simple,straightforward,clear","karmaşık, girift"],
+[2,"cryptic","adj.","/KRIP-tik/","Having a meaning that is mysterious or obscure; deliberately unclear.","The professor's cryptic comment left students unsure what would be on the exam.","obscure,enigmatic,puzzling","obvious,clear,transparent","gizemli, anlaşılması güç"],
+[2,"digress","v.","/dahy-GRES/","To depart temporarily from the main subject in speech or writing.","The witness kept digressing into unrelated details, frustrating the attorney.","stray,deviate,wander","stay on topic,focus","konudan sapmak"],
+[2,"diplomatic","adj.","/dip-luh-MAT-ik/","Skilled in handling sensitive matters without causing offense.","She gave a diplomatic answer that avoided blaming either department.","tactful,sensitive,discreet","tactless,blunt,undiplomatic","diplomatik, ince davranan"],
+[2,"discourse","n.","/DIS-kawrs/","Written or spoken communication or debate on a particular topic.","Public discourse around the policy quickly became polarized on social media.","dialogue,conversation,debate","silence","söylem, konuşma"],
+[2,"disparage","v.","/dih-SPAR-ij/","To regard or describe as being of little worth; to belittle.","The article was criticized for disparaging an entire profession based on a few cases.","belittle,deprecate,demean","praise,commend,extol","küçümsemek, kötülemek"],
+[2,"eloquent","adj.","/EL-uh-kwuhnt/","Fluent and persuasive in speaking or writing.","Her eloquent closing statement swayed several undecided jurors.","articulate,fluent,persuasive","inarticulate,halting,tongue-tied","güzel ve etkili konuşan"],
+[2,"emphatic","adj.","/em-FAT-ik/","Expressed forcefully and clearly.","The board issued an emphatic denial of the rumors surrounding the merger.","forceful,decisive,vehement","hesitant,tentative,mild","vurgulu, kesin"],
+[2,"euphemism","n.","/YOO-fuh-miz-uhm/","A mild or indirect word substituted for one considered harsh or blunt.","'Downsizing' is a familiar euphemism for laying off employees.","understatement,substitute term","dysphemism (blunt term)","örtmece"],
+[2,"expound","v.","/ik-SPOWND/","To explain a theory or idea in detail.","The guest speaker spent an hour expounding on the causes of the financial crisis.","elaborate,explain,clarify","obscure,gloss over","ayrıntılı olarak açıklamak"],
+[2,"facetious","adj.","/fuh-SEE-shuhs/","Treating a serious subject with deliberately inappropriate humor.","His facetious remark during the safety briefing did not amuse the instructor.","flippant,glib,jokey","serious,earnest,solemn","uygunsuz şekilde şakacı"],
+[2,"glib","adj.","/glib/","Fluent and voluble but insincere or lacking depth.","The candidate's glib responses avoided any real engagement with the policy question.","smooth-talking,superficial,slick","sincere,thoughtful,genuine","dil dökücü, yüzeysel derecede akıcı"],
+[2,"hyperbole","n.","/hy-PUR-buh-lee/","Deliberate exaggeration used for emphasis, not meant literally.","'I've told you a million times' is a classic example of hyperbole.","exaggeration,overstatement","understatement","abartı"],
+[2,"idiomatic","adj.","/id-ee-uh-MAT-ik/","Using expressions natural to a native speaker of a language.","Her essay's idiomatic phrasing suggested years of immersion in English.","natural,colloquial,fluent","stilted,unnatural,awkward","dile özgü, deyimsel"],
+[2,"incisive","adj.","/in-SAHY-siv/","Sharp and direct in analysis or expression.","The critic's incisive review exposed the play's weak character development.","sharp,penetrating,trenchant","vague,dull,superficial","keskin, isabetli"],
+[2,"irony","n.","/AHY-ruh-nee/","The expression of meaning through language that signifies the opposite; a contrast between expectation and reality.","There is a certain irony in a fire station burning down.","sarcasm,paradox,incongruity","sincerity,literalness","ironi"],
+[2,"jargon","n.","/JAHR-guhn/","Special words or expressions used by a particular profession that are hard for others to understand.","The report was so full of medical jargon that patients struggled to understand it.","terminology,lingo,argot","plain language","jargon, meslek dili"],
+[2,"laconic","adj.","/luh-KON-ik/","Using very few words; concise to the point of terseness.","His laconic reply, 'It's fine,' told her nothing about how the meeting had gone.","terse,brief,curt","verbose,talkative,wordy","az sözle konuşan"],
+[2,"lampoon","v.","/lam-POON/","To publicly criticize someone or something using ridicule or satire.","The comedy show lampooned the president's latest policy announcement.","satirize,mock,parody","praise,flatter","alaya alarak eleştirmek"],
+[2,"loquacious","adj.","/loh-KWEY-shuhs/","Tending to talk a great deal; very talkative.","The loquacious guide gave far more historical detail than the tour required.","talkative,garrulous,chatty","taciturn,reticent,reserved","çok konuşkan, geveze"],
+[2,"malign","v.","/muh-LAHYN/","To speak about someone in a spitefully critical manner.","The former employee maligned the company in a series of public posts.","slander,defame,disparage","praise,commend,extol","kötülemek, iftira atmak"],
+[2,"oratory","n.","/AWR-uh-tawr-ee/","The art of formal public speaking, especially persuasive speech.","Ancient Greece placed enormous value on skilled oratory as a civic virtue.","rhetoric,eloquence,public speaking","(no direct antonym)","hitabet sanatı"],
+[2,"paraphrase","v.","/PAR-uh-freyz/","To express the meaning of something using different words.","IELTS Reading often asks candidates to match a paraphrase to information in the passage.","reword,restate,rephrase","quote directly","başka sözcüklerle anlatmak"],
+[2,"pejorative","adj.","/pih-JAWR-uh-tiv/","Expressing contempt or disapproval; having a negative connotation.","The word 'bureaucrat' is often used in a pejorative sense.","derogatory,disparaging,negative","complimentary,favorable,laudatory","aşağılayıcı (anlam)"],
+[2,"polemic","n.","/puh-LEM-ik/","A strong verbal or written attack on someone's opinions or principles.","The essay reads less like balanced analysis and more like a polemic against modern art.","diatribe,tirade,invective","conciliation,balanced argument","polemik, sert eleştiri yazısı"],
+[2,"rebuttal","n.","/rih-BUHT-l/","A response that argues against a previous statement or claim.","The defense's rebuttal focused on inconsistencies in the witness's timeline.","refutation,counterargument,response","agreement,concession","karşı argüman, çürütme"],
+[2,"reticent","adj.","/RET-uh-suhnt/","Not revealing one's thoughts or feelings readily; reserved.","He remained reticent about his reasons for leaving the company.","reserved,taciturn,guarded","forthcoming,candid,talkative","ağzı sıkı, az konuşan"],
+[2,"rhetoric","n.","/RET-er-ik/","The art of effective or persuasive speaking or writing.","Much of the campaign speech was rhetoric with little policy substance behind it.","eloquence,oratory,wording","plain speech","retorik, hitabet"],
+[2,"sarcasm","n.","/SAHR-kaz-uhm/","The use of remarks that clearly mean the opposite of what they say, usually to mock.","'Nice job,' she said with obvious sarcasm after the printer jammed again.","mockery,derision,irony","sincerity,earnestness","alay, iğneleme"],
+[2,"satire","n.","/SAT-ahyuhr/","The use of humor, irony, or exaggeration to criticize people's vices or society.","The novel is a biting satire of corporate culture in the 1980s.","parody,lampoon,mockery","flattery,praise","hiciv, yergi"],
+[2,"succinct","adj.","/suhk-SINGKT/","Expressed clearly and in few words; concise.","Examiners reward a succinct thesis statement over a rambling introduction.","concise,brief,terse","verbose,rambling,wordy","kısa ve öz"],
+[2,"terse","adj.","/turs/","Sparing in the use of words; abrupt.","His terse email left the client unsure whether the deal was still on.","curt,brief,laconic","verbose,expansive,wordy","kısa ve sert (ifade)"],
+[2,"treatise","n.","/TREE-tis/","A formal, systematic written work dealing thoroughly with a subject.","Locke's treatise on government influenced generations of political thinkers.","dissertation,essay,discourse","(no direct antonym)","bilimsel inceleme, risale"],
+[2,"trite","adj.","/trahyt/","Overused and unoriginal; lacking freshness.","The graduation speech was full of trite phrases about following your dreams.","cliched,hackneyed,stale","original,fresh,novel","basmakalıp, beylik"],
+[2,"verbose","adj.","/ver-BOHS/","Using more words than needed; wordy.","The verbose memo could have made its point in half the length.","wordy,long-winded,prolix","concise,succinct,terse","gereksiz derecede uzun sözlü"],
+[2,"vernacular","n.","/ver-NAK-yuh-ler/","The language or dialect spoken by ordinary people in a particular region.","The novel's dialogue is written in the local vernacular for authenticity.","dialect,colloquial speech,idiom","formal language,standard speech","yerel/günlük konuşma dili"],
+[2,"wry","adj.","/rahy/","Using or expressing dry, mocking humor.","She offered a wry smile at the irony of the situation.","ironic,sardonic,droll","earnest,solemn,sincere","alaycı, iğneleyici (kuru mizahla)"],
+[2,"diatribe","n.","/DAHY-uh-trahyb/","A forceful and bitter verbal attack against someone or something.","The op-ed quickly turned from analysis into a diatribe against the entire industry.","tirade,rant,polemic","tribute,praise,eulogy","şiddetli sözlü saldırı"],
+[2,"innuendo","n.","/in-yoo-EN-doh/","An indirect or subtle suggestion, especially of something disparaging.","The article was full of innuendo but offered no direct evidence of wrongdoing.","insinuation,implication,hint","direct statement","üstü kapalı ima"],
+[3,"altruistic","adj.","/al-troo-IS-tik/","Showing selfless concern for the well-being of others.","Her altruistic decision to donate a kidney to a stranger surprised even her closest friends.","selfless,charitable,benevolent","selfish,egotistical,self-serving","özgeci, diğerkâm"],
+[3,"amiable","adj.","/EY-mee-uh-buhl/","Having a friendly and pleasant manner.","The new manager's amiable personality quickly put the nervous team at ease.","friendly,affable,genial","hostile,unfriendly,disagreeable","sevimli, dostane"],
+[3,"audacious","adj.","/aw-DEY-shuhs/","Showing a willingness to take bold risks; extremely daring.","The startup's audacious plan to compete with industry giants raised eyebrows and funding alike.","bold,daring,brazen","timid,cautious,meek","cüretkâr, gözü pek"],
+[3,"austere","adj.","/aw-STEER/","Severe or strict in manner; without luxury or comfort.","The monks lived an austere life, free of all but the barest necessities.","stern,severe,spartan","luxurious,indulgent,lavish","sade ve çetin (yaşam tarzı)"],
+[3,"benevolent","adj.","/buh-NEV-uh-luhnt/","Well-meaning and kindly; disposed to do good.","The benevolent foundation quietly funded scholarships for first-generation students.","kind,charitable,compassionate","malevolent,cruel,unkind","iyiliksever"],
+[3,"brazen","adj.","/BREY-zuhn/","Bold and without shame or embarrassment.","The brazen theft occurred in broad daylight, in full view of security cameras.","shameless,bold,audacious","timid,bashful,discreet","arsız, yüzsüz"],
+[3,"callous","adj.","/KAL-uhs/","Showing an insensitive and cruel disregard for others' feelings.","His callous remark about the layoffs revealed how disconnected management had become.","unfeeling,insensitive,hardened","compassionate,sensitive,caring","duygusuz, katı yürekli"],
+[3,"candid","adj.","/KAN-did/","Truthful and straightforward; frank.","In a candid interview, the CEO admitted the product launch had been a mistake.","frank,honest,forthright","evasive,deceptive,guarded","açık sözlü, samimi"],
+[3,"capricious","adj.","/kuh-PRISH-uhs/","Given to sudden and unaccountable changes of mood or behavior.","The capricious weather in the mountains can shift from sunshine to hail within an hour.","fickle,erratic,unpredictable","stable,consistent,steady","kaprisli, değişken"],
+[3,"circumspect","adj.","/SUR-kuhm-spekt/","Wary and careful to consider all circumstances before acting.","Given the market's volatility, the fund manager took a more circumspect approach to investing.","cautious,prudent,wary","reckless,rash,careless","ihtiyatlı, tedbirli"],
+[3,"complacent","adj.","/kuhm-PLEY-suhnt/","Showing smug self-satisfaction with one's own achievements.","The champion team grew complacent after years of easy victories and lost their edge.","self-satisfied,smug,unconcerned","vigilant,dissatisfied,driven","kendinden hoşnut, rehavete kapılmış"],
+[3,"conscientious","adj.","/kon-shee-EN-shuhs/","Wishing to do what is right, especially in one's work; thorough and careful.","The conscientious intern double-checked every figure before submitting the report.","diligent,meticulous,scrupulous","careless,negligent,lax","özenli, vicdanlı"],
+[3,"contrite","adj.","/kuhn-TRAHYT/","Feeling or showing genuine remorse for wrongdoing.","His contrite apology, delivered without excuses, helped repair the friendship.","remorseful,repentant,penitent","unrepentant,remorseless,unapologetic","derin pişmanlık duyan"],
+[3,"deferential","adj.","/def-uh-REN-shuhl/","Showing respect for another's authority, opinion, or wishes.","Junior staff were expected to be deferential toward senior partners in meetings.","respectful,courteous,obliging","disrespectful,defiant,insolent","saygılı, hürmetkâr"],
+[3,"diligent","adj.","/DIL-i-juhnt/","Showing careful and persistent effort in work or duties.","Diligent studying over several months, not last-minute cramming, produced her high score.","industrious,assiduous,hardworking","lazy,negligent,idle","çalışkan, gayretli"],
+[3,"docile","adj.","/DOS-uhl/","Ready to accept control or instruction; easily managed.","The trainer chose the most docile horse for the beginner riding lesson.","obedient,compliant,submissive","rebellious,unruly,defiant","uysal, itaatkâr"],
+[3,"dogmatic","adj.","/dawg-MAT-ik/","Inclined to lay down principles as unquestionably true, without allowing debate.","The professor's dogmatic insistence on one theory discouraged students from asking questions.","rigid,doctrinaire,inflexible","open-minded,flexible,receptive","dogmatik, katı görüşlü"],
+[3,"eccentric","adj.","/ik-SEN-trik/","Unconventional and slightly strange in behavior or appearance.","The eccentric inventor filled his workshop with half-finished, whimsical machines.","unconventional,quirky,idiosyncratic","conventional,ordinary,normal","eksantrik, tuhaf"],
+[3,"egotistical","adj.","/ee-guh-TIS-ti-kuhl/","Excessively conceited or absorbed in oneself.","His egotistical speech barely mentioned the team that had made the project possible.","self-centered,conceited,narcissistic","humble,modest,selfless","bencil, kendini beğenmiş"],
+[3,"flippant","adj.","/FLIP-uhnt/","Not showing serious or respectful attention to something important.","Her flippant response to the safety concern angered the entire crew.","glib,casual,disrespectful","earnest,serious,respectful","ciddiyetsiz, saygısız"],
+[3,"frugal","adj.","/FROO-guhl/","Sparing or economical in the use of resources.","Growing up during the recession made her permanently frugal, even after becoming wealthy.","thrifty,economical,sparing","wasteful,extravagant,lavish","tutumlu, idareli"],
+[3,"gregarious","adj.","/gri-GAIR-ee-uhs/","Fond of the company of others; sociable.","The gregarious new employee had befriended half the office within a week.","sociable,outgoing,convivial","reserved,solitary,introverted","girişken, sosyal"],
+[3,"gullible","adj.","/GUHL-uh-buhl/","Easily persuaded to believe something; credulous.","Scammers specifically target gullible investors with promises of guaranteed returns.","credulous,naive,trusting","skeptical,wary,shrewd","saf, kolay aldatılan"],
+[3,"haughty","adj.","/HAW-tee/","Arrogantly superior and disdainful.","The haughty critic dismissed the debut novel without seeming to have finished it.","arrogant,disdainful,supercilious","humble,modest,unassuming","kibirli, mağrur"],
+[3,"impudent","adj.","/IM-pyuh-duhnt/","Not showing due respect for another person; impertinently bold.","The impudent remark from the new hire startled the entire boardroom.","insolent,disrespectful,cheeky","respectful,polite,deferential","küstah"],
+[3,"indefatigable","adj.","/in-di-FAT-i-guh-buhl/","Persisting tirelessly; incapable of being tired out.","The indefatigable volunteers worked around the clock during the relief effort.","tireless,relentless,persistent","tireable,easily fatigued","yorulmak bilmez"],
+[3,"ingenuous","adj.","/in-JEN-yoo-uhs/","Innocent and unsuspecting; showing a lack of sophistication.","Her ingenuous belief that everyone told the truth made her an easy target for con artists.","naive,innocent,artless","cynical,worldly,guarded","saf, art niyetsiz"],
+[3,"insolent","adj.","/IN-suh-luhnt/","Showing a rude and arrogant lack of respect.","The teacher was unimpressed by the student's insolent tone.","impertinent,disrespectful,rude","polite,respectful,courteous","küstah, terbiyesiz"],
+[3,"intransigent","adj.","/in-TRAN-si-juhnt/","Unwilling to change one's views or agree about something.","Negotiations stalled because both sides remained intransigent on the core demand.","uncompromising,inflexible,unyielding","flexible,accommodating,conciliatory","uzlaşmaz"],
+[3,"inveterate","adj.","/in-VET-er-it/","Having a long-standing habit that is unlikely to change.","An inveterate collector, he had amassed thousands of rare coins over five decades.","habitual,confirmed,chronic","occasional,casual,infrequent","kökleşmiş, müptela"],
+[3,"magnanimous","adj.","/mag-NAN-uh-muhs/","Generous or forgiving, especially toward a rival or someone less powerful.","In a magnanimous gesture, the winning candidate praised her opponent's years of service.","generous,gracious,benevolent","petty,vindictive,mean-spirited","yüce gönüllü"],
+[3,"meticulous","adj.","/muh-TIK-yuh-luhs/","Showing great attention to detail; very careful and precise.","The meticulous editor caught errors that three previous proofreaders had missed.","precise,thorough,painstaking","careless,sloppy,slapdash","titiz, çok dikkatli"],
+[3,"obstinate","adj.","/OB-stuh-nit/","Stubbornly refusing to change one's opinion or course of action.","The obstinate committee member blocked every proposed compromise.","stubborn,inflexible,intransigent","flexible,accommodating,yielding","inatçı"],
+[3,"officious","adj.","/uh-FISH-uhs/","Assertive of authority in an annoyingly domineering way, especially about petty matters.","The officious hall monitor wrote up students for the smallest infractions.","overbearing,meddlesome,domineering","unassuming,humble,self-effacing","işgüzar, gereksiz müdahaleci"],
+[3,"opportunistic","adj.","/op-er-too-NIS-tik/","Exploiting circumstances to gain immediate advantage, often disregarding principle.","Critics accused the politician of an opportunistic shift in position ahead of the election.","exploitative,self-serving,expedient","principled,idealistic,selfless","fırsatçı"],
+[3,"ostentatious","adj.","/os-ten-TEY-shuhs/","Characterized by vulgar or pretentious display, meant to impress.","The ostentatious mansion, with its gold fixtures, seemed designed to advertise wealth.","showy,flashy,pretentious","modest,understated,unassuming","gösterişçi"],
+[3,"pragmatic","adj.","/prag-MAT-ik/","Dealing with things sensibly and realistically, based on practical rather than theoretical considerations.","Rather than debate ideology, the mayor took a pragmatic approach to fixing the roads.","practical,realistic,sensible","idealistic,impractical,theoretical","pragmatik, işlevsel düşünen"],
+[3,"prudent","adj.","/PROOD-nt/","Acting with care and thought for the future; sensible and cautious.","A prudent investor keeps an emergency fund separate from riskier assets.","cautious,sensible,judicious","reckless,rash,imprudent","tedbirli, sağgörülü"],
+[3,"pretentious","adj.","/prih-TEN-shuhs/","Attempting to impress by affecting greater importance or talent than is real.","The restaurant's pretentious menu described a simple salad in three paragraphs.","affected,pompous,ostentatious","modest,unpretentious,humble","yapmacık, bilgiçlik taslayan"],
+[3,"resilient","adj.","/rih-ZIL-yuhnt/","Able to recover quickly from difficulties; tough.","Coral reefs have proven remarkably resilient in regions with lower pollution levels.","adaptable,tough,hardy","fragile,vulnerable,delicate","dirençli, çabuk toparlanan"],
+[3,"sanguine","adj.","/SANG-gwin/","Optimistic or positive, especially in a difficult situation.","Despite the setback, she remained sanguine about the project's long-term prospects.","optimistic,hopeful,confident","pessimistic,despondent,gloomy","iyimser, umutlu"],
+[3,"sardonic","adj.","/sahr-DON-ik/","Grimly mocking or cynical.","He offered a sardonic laugh at the suggestion that the plan would work.","mocking,cynical,derisive","earnest,warm,sincere","alaycı, iğneleyici"],
+[3,"servile","adj.","/SUR-vuhl/","Excessively willing to serve or please others; submissive.","The waiter's servile flattery made the diners visibly uncomfortable.","obsequious,submissive,subservient","assertive,domineering,independent","dalkavuk, aşırı boyun eğen"],
+[3,"staunch","adj.","/stawnch/","Loyal and committed in attitude, especially to a person, cause, or belief.","She remained a staunch supporter of the reform even as public opinion turned against it.","loyal,steadfast,unwavering","disloyal,fickle,inconstant","sadık, sarsılmaz"],
+[3,"stoic","adj.","/STOH-ik/","Enduring hardship without showing feelings or complaining.","He gave a stoic response to the diagnosis, focusing immediately on treatment options.","impassive,unemotional,resigned","emotional,demonstrative,expressive","metanetli, sabırlı"],
+[3,"tenacious","adj.","/tuh-NEY-shuhs/","Tending to keep a firm hold; persistent in maintaining a course of action.","Her tenacious pursuit of the story eventually uncovered the fraud.","persistent,resolute,dogged","irresolute,wavering,submissive","azimli, ısrarcı"],
+[3,"unassuming","adj.","/uhn-uh-SOO-ming/","Not pretentious or arrogant; modest.","Despite his fame, the scientist remained unassuming, preferring the lab to the spotlight.","modest,humble,self-effacing","arrogant,pretentious,boastful","alçakgönüllü, gösterişsiz"],
+[3,"vain","adj.","/veyn/","Having an excessively high opinion of one's appearance or achievements.","His vain insistence on being photographed from only one angle amused the crew.","conceited,narcissistic,self-important","modest,humble,unassuming","kendini beğenmiş"],
+[3,"wary","adj.","/WAIR-ee/","Feeling or showing caution about possible dangers or problems.","Investors remained wary of the market after the previous year's crash.","cautious,guarded,circumspect","trusting,unsuspecting,careless","temkinli, ihtiyatlı"],
+[3,"zealous","adj.","/ZEL-uhs/","Having or showing great energy or enthusiasm in pursuit of a cause.","The zealous volunteers canvassed every street in the district before the vote.","fervent,ardent,enthusiastic","apathetic,indifferent,unenthusiastic","gayretli, ateşli"],
+[4,"apathy","n.","/AP-uh-thee/","Lack of interest, enthusiasm, or concern.","Voter apathy in local elections has led to record-low turnout in recent years.","indifference,detachment,listlessness","enthusiasm,passion,zeal","ilgisizlik, kayıtsızlık"],
+[4,"ambivalent","adj.","/am-BIV-uh-luhnt/","Having mixed feelings or contradictory ideas about something.","She felt ambivalent about the promotion, excited by the challenge but wary of the workload.","conflicted,uncertain,torn","decided,certain,resolute","çelişkili duygular içinde"],
+[4,"animosity","n.","/an-uh-MOS-i-tee/","Strong hostility or dislike.","Years of trade disputes left lingering animosity between the two nations.","hostility,antagonism,resentment","goodwill,friendliness,affection","düşmanlık, husumet"],
+[4,"anguish","n.","/ANG-gwish/","Severe mental or physical pain or suffering.","The family's anguish was evident as they waited for news from the hospital.","agony,distress,torment","comfort,relief,ease","büyük acı, ıstırap"],
+[4,"antipathy","n.","/an-TIP-uh-thee/","A deep-seated feeling of dislike or aversion.","His antipathy toward bureaucracy shaped nearly every decision he made as manager.","aversion,hostility,animosity","affinity,fondness,liking","antipati, hoşlanmama"],
+[4,"apprehension","n.","/ap-ri-HEN-shuhn/","Anxiety or fear that something bad may happen.","Despite months of preparation, she felt a wave of apprehension before the interview.","anxiety,unease,dread","confidence,composure,calm","endişe, kaygı"],
+[4,"bewilderment","n.","/bih-WIL-der-muhnt/","A feeling of being confused or disoriented.","The tourists' bewilderment was obvious as they stared at the unfamiliar subway map.","confusion,perplexity,disorientation","clarity,understanding,certainty","şaşkınlık"],
+[4,"compassion","n.","/kuhm-PASH-uhn/","Sympathetic concern for the suffering of others.","The nurse's compassion for her patients extended well beyond her official duties.","empathy,sympathy,kindness","indifference,callousness,cruelty","merhamet, şefkat"],
+[4,"contempt","n.","/kuhn-TEMPT/","The feeling that a person or thing is beneath consideration or worthless.","His obvious contempt for the rules eventually cost him his position.","disdain,scorn,disrespect","admiration,respect,esteem","küçümseme, hor görme"],
+[4,"despondent","adj.","/dih-SPON-duhnt/","In low spirits from loss of hope or courage.","After the third rejection letter, he grew despondent about his career prospects.","dejected,hopeless,dispirited","hopeful,optimistic,upbeat","umutsuz, kederli"],
+[4,"disdain","n.","/dis-DEYN/","The feeling that someone or something is unworthy of one's consideration.","She viewed the tabloid's claims with open disdain.","contempt,scorn,derision","admiration,respect,regard","küçümseme"],
+[4,"disgruntled","adj.","/dis-GRUHN-tld/","Angry or dissatisfied.","Disgruntled customers flooded the company's social media pages after the price hike.","dissatisfied,discontented,resentful","content,satisfied,pleased","hoşnutsuz, dargın"],
+[4,"disillusioned","adj.","/dis-i-LOO-zhuhnd/","Disappointed by discovering that something is not as good as one believed.","Many young activists grew disillusioned after seeing how slowly reform actually progressed.","disenchanted,disappointed,jaded","idealistic,optimistic,hopeful","hayal kırıklığına uğramış"],
+[4,"dismay","n.","/dis-MEY/","A feeling of concern and distress caused by something unexpected.","To her dismay, the flight had been cancelled without any notice.","distress,alarm,consternation","relief,delight,reassurance","üzüntü ve şaşkınlık"],
+[4,"elated","adj.","/ih-LEY-tid/","Extremely happy and excited.","The team was elated after finally securing the contract they had pursued for a year.","overjoyed,jubilant,thrilled","dejected,downcast,despondent","çok sevinçli, coşkulu"],
+[4,"envious","adj.","/EN-vee-uhs/","Feeling discontented or resentful longing aroused by someone else's possessions or qualities.","He tried to hide his envious glance at his colleague's new corner office.","jealous,covetous,resentful","content,satisfied,unenvious","kıskanç"],
+[4,"equanimity","n.","/ee-kwuh-NIM-i-tee/","Mental calmness and composure, especially in a difficult situation.","She accepted the diagnosis with a striking equanimity that reassured her whole family.","composure,calmness,serenity","agitation,anxiety,distress","soğukkanlılık, iç huzuru"],
+[4,"exasperation","n.","/ig-zas-per-EY-shuhn/","A feeling of intense irritation or annoyance.","With a sigh of exasperation, the technician started the repair over from scratch.","frustration,irritation,annoyance","patience,calm,contentment","sinirlenme, bezginlik"],
+[4,"fervent","adj.","/FUR-vuhnt/","Having or displaying passionate intensity.","The fervent crowd chanted long after the speech had ended.","passionate,ardent,zealous","apathetic,indifferent,unenthusiastic","ateşli, coşkulu"],
+[4,"forlorn","adj.","/fer-LAWRN/","Pitifully sad and abandoned or lonely.","The forlorn dog waited by the shelter gate every day, hoping to be adopted.","desolate,abandoned,dejected","cheerful,content,hopeful","kimsesiz, mahzun"],
+[4,"indifferent","adj.","/in-DIF-er-uhnt/","Having no particular interest or sympathy; unconcerned.","The committee seemed indifferent to the concerns raised by local residents.","unconcerned,apathetic,detached","interested,concerned,engaged","kayıtsız"],
+[4,"indignant","adj.","/in-DIG-nuhnt/","Feeling or showing anger because of something unjust or unfair.","She was indignant at being blamed for a mistake she had warned against for weeks.","outraged,resentful,incensed","content,pleased,unruffled","haksızlık karşısında öfkeli"],
+[4,"jubilant","adj.","/JOO-buh-luhnt/","Feeling or expressing great happiness and triumph.","Jubilant fans flooded the streets after the championship victory.","elated,triumphant,exultant","despondent,dejected,downcast","sevinç dolu, coşkulu"],
+[4,"lament","v.","/luh-MENT/","To express sorrow or regret for something.","Economists lament the missed opportunity to reform the tax system a decade ago.","mourn,grieve,bemoan","celebrate,rejoice,welcome","yakınmak, hayıflanmak"],
+[4,"lethargic","adj.","/luh-THAHR-jik/","Sluggish and lacking energy or enthusiasm.","The heat left the entire office feeling lethargic by mid-afternoon.","sluggish,listless,drowsy","energetic,vigorous,animated","halsiz, uyuşuk"],
+[4,"malaise","n.","/muh-LEYZ/","A general feeling of discomfort, illness, or unease, often with no clear single cause.","A quiet malaise had settled over the once-thriving factory town.","unease,discontent,despondency","well-being,vigor,contentment","belirsiz bir huzursuzluk hali"],
+[4,"melancholy","n.","/MEL-uhn-kol-ee/","A deep, pensive sadness, often without an obvious cause.","The old photographs filled her with a gentle melancholy.","sadness,gloom,wistfulness","joy,cheerfulness,gaiety","hüzün, melankoli"],
+[4,"morose","adj.","/muh-ROHS/","Sullen and ill-tempered.","He grew morose after being passed over for the promotion a second time.","sullen,gloomy,glum","cheerful,jovial,upbeat","asık suratlı, somurtkan"],
+[4,"nostalgia","n.","/no-STAL-juh/","A sentimental longing for the past.","The old song filled the room with sudden nostalgia for their college years.","wistfulness,reminiscence,longing","indifference (to the past)","nostalji, geçmişe özlem"],
+[4,"wistful","adj.","/WIST-fuhl/","Having or showing a feeling of vague or regretful longing.","She gave a wistful smile at the mention of her hometown.","yearning,nostalgic,pensive","content,satisfied,indifferent","hüzünlü özlem dolu"],
+[4,"pathos","n.","/PEY-thos/","A quality that evokes pity or sadness.","The film's final scene achieves real pathos without resorting to sentimentality.","poignancy,sorrow,pity","humor,levity","dokunaklılık, acındırıcılık"],
+[4,"perturbed","adj.","/per-TURBD/","Anxious or unsettled.","She seemed visibly perturbed by the sudden change in the meeting agenda.","unsettled,troubled,agitated","calm,composed,serene","tedirgin, rahatsız"],
+[4,"placid","adj.","/PLAS-id/","Not easily upset or excited; calm and peaceful.","The lake's placid surface reflected the mountains perfectly at dawn.","calm,serene,tranquil","turbulent,agitated,volatile","sakin, dingin"],
+[4,"poignant","adj.","/POIN-yuhnt/","Evoking a keen sense of sadness or regret.","The memoir's most poignant passage describes her father's final days.","moving,touching,heart-wrenching","unmoving,dull,flat","dokunaklı"],
+[4,"quell","v.","/kwel/","To suppress or put an end to, often forcibly; to calm.","The announcement was meant to quell rumors of an impending layoff.","suppress,subdue,pacify","incite,provoke,stir up","bastırmak, yatıştırmak"],
+[4,"rancor","n.","/RANG-ker/","Bitterness or resentfulness, especially when long-standing.","Despite the divorce, they managed to co-parent without visible rancor.","bitterness,resentment,animosity","goodwill,affection,harmony","kin, garez"],
+[4,"remorse","n.","/rih-MAWRS/","Deep regret or guilt for a wrong committed.","He expressed genuine remorse for the harm his negligence had caused.","guilt,regret,contrition","satisfaction,pride,indifference","vicdan azabı, pişmanlık"],
+[4,"resentment","n.","/rih-ZENT-muhnt/","Bitter indignation at having been treated unfairly.","Years of resentment finally surfaced during the family's holiday dinner.","bitterness,indignation,grievance","contentment,gratitude,acceptance","içerleme, gücenme"],
+[4,"reverence","n.","/REV-er-uhns/","Deep respect for someone or something.","The students listened with quiet reverence as the retired professor spoke.","awe,veneration,respect","disrespect,contempt,disdain","derin saygı"],
+[4,"rue","v.","/roo/","To bitterly regret something.","He would rue the decision to skip the final review before submitting the report.","regret,lament,repent","welcome,embrace","pişman olmak"],
+[4,"serene","adj.","/suh-REEN/","Calm, peaceful, and untroubled.","Even amid the chaos of the newsroom, the editor remained remarkably serene.","calm,tranquil,composed","agitated,turbulent,anxious","sakin, huzurlu"],
+[4,"solace","n.","/SOL-is/","Comfort or consolation in a time of distress.","She found solace in gardening after the loss of her job.","comfort,consolation,relief","distress,anguish,torment","teselli"],
+[4,"sullen","adj.","/SUHL-uhn/","Bad-tempered and sulky; gloomily silent.","The sullen teenager refused to speak for most of the car ride home.","sulky,morose,brooding","cheerful,pleasant,amiable","somurtkan"],
+[4,"trepidation","n.","/trep-i-DEY-shuhn/","A feeling of fear or anxiety about something that may happen.","She approached the podium with visible trepidation before her first keynote.","apprehension,anxiety,dread","confidence,calm,assurance","korku karışık endişe"],
+[4,"vexation","n.","/vek-SEY-shuhn/","The state of being annoyed, frustrated, or worried.","His constant interruptions were a source of real vexation during the meeting.","annoyance,irritation,frustration","satisfaction,contentment,delight","can sıkıntısı"],
+[4,"vindictive","adj.","/vin-DIK-tiv/","Having or showing a strong desire for revenge.","His vindictive response to the criticism only damaged his own reputation further.","spiteful,vengeful,unforgiving","forgiving,magnanimous,merciful","kinci, intikamcı"],
+[4,"woeful","adj.","/WOH-fuhl/","Characterized by, expressing, or bringing sorrow; extremely bad.","The team's woeful defense allowed five goals in the first half alone.","sorrowful,dismal,pitiful","joyful,excellent,commendable","acıklı, çok kötü"],
+[4,"yearning","n.","/YUR-ning/","An intense feeling of longing for something.","His yearning for the mountains never faded, even after decades in the city.","longing,craving,desire","indifference,satisfaction","özlem, hasret"],
+[4,"angst","n.","/ahngst/","A feeling of deep anxiety or dread, often about the human condition.","The novel captures the quiet angst of a generation facing an uncertain economy.","anxiety,unease,dread","peace,contentment,serenity","derin kaygı, bunaltı"],
+[4,"euphoria","n.","/yoo-FAWR-ee-uh/","A feeling of intense excitement and happiness.","A wave of euphoria swept the stadium as the final whistle blew.","elation,ecstasy,jubilation","despair,misery,gloom","coşku, aşırı sevinç"],
+[5,"accelerate","v.","/ak-SEL-uh-reyt/","To increase in speed, rate, or extent.","Urbanization has accelerated dramatically across Southeast Asia over the past two decades.","hasten,speed up,quicken","decelerate,slow,hinder","hızlandırmak"],
+[5,"amalgamate","v.","/uh-MAL-guh-meyt/","To combine or unite to form one organization or structure.","The two rival unions eventually amalgamated to increase their bargaining power.","merge,combine,unite","separate,divide,split","birleştirmek"],
+[5,"augment","v.","/awg-MENT/","To make something greater by adding to it.","The scholarship augmented her existing savings, making the trip abroad possible.","increase,supplement,enhance","reduce,diminish,decrease","artırmak"],
+[5,"burgeon","v.","/BUR-juhn/","To begin to grow or increase rapidly.","The city's burgeoning tech sector attracted thousands of new residents each year.","flourish,thrive,expand","decline,shrink,wither","hızla büyümek, filizlenmek"],
+[5,"catalyst","n.","/KAT-l-ist/","A person or thing that precipitates an event or change.","The oil crisis acted as a catalyst for renewed investment in renewable energy.","trigger,spur,impetus","deterrent,hindrance","katalizör, tetikleyici unsur"],
+[5,"coalesce","v.","/koh-uh-LES/","To come together to form one mass or whole.","Several small protest groups coalesced into a single, unified movement.","merge,unite,fuse","disperse,scatter,separate","birleşmek, kaynaşmak"],
+[5,"culminate","v.","/KUHL-muh-neyt/","To reach a climax or point of highest development.","Years of research culminated in a single, widely cited breakthrough paper.","climax,peak,conclude","begin,commence,originate","doruk noktasına ulaşmak"],
+[5,"debilitate","v.","/dih-BIL-i-teyt/","To make someone or something weak.","The debilitating illness kept him from working for nearly six months.","weaken,enfeeble,incapacitate","strengthen,invigorate,fortify","güçten düşürmek"],
+[5,"atrophy","v.","/A-truh-fee/","To waste away or become weaker through disuse.","Without regular practice, even fluent language skills can atrophy within a few years.","wither,weaken,decline","strengthen,develop,grow","körelmek, güçsüzleşmek"],
+[5,"dwindle","v.","/DWIN-dl/","To diminish gradually in size, amount, or strength.","The town's population dwindled steadily after the factory closed.","decrease,diminish,shrink","increase,grow,expand","giderek azalmak"],
+[5,"emerge","v.","/ih-MURJ/","To become apparent or come into view.","A clear pattern began to emerge once researchers plotted the data over time.","appear,surface,arise","vanish,disappear,recede","ortaya çıkmak"],
+[5,"entrench","v.","/en-TRENCH/","To establish firmly so that change is difficult.","Decades of practice had entrenched the outdated procedure throughout the organization.","embed,ingrain,fix","uproot,dislodge,remove","kökleşmek, yerleşmek"],
+[5,"escalate","v.","/ES-kuh-leyt/","To increase rapidly in intensity or extent.","Tensions escalated quickly after the border incident was reported.","intensify,increase,worsen","de-escalate,diminish,ease","tırmanmak, şiddetlenmek"],
+[5,"evolve","v.","/ih-VOLV/","To develop gradually, especially from a simpler to a more complex form.","The company's strategy has evolved considerably since its early startup days.","develop,progress,mature","stagnate,regress,remain static","evrimleşmek, gelişmek"],
+[5,"exacerbate","v.","/ig-ZAS-er-beyt/","To make a problem or situation worse.","Poor drainage exacerbated the flooding after the storm.","worsen,aggravate,intensify","alleviate,ease,improve","kötüleştirmek"],
+[5,"flourish","v.","/FLUR-ish/","To grow or develop in a healthy or vigorous way.","Small businesses flourished in the district after the new transit line opened.","thrive,prosper,bloom","decline,wither,languish","gelişip serpilmek"],
+[5,"fluctuate","v.","/FLUHK-choo-eyt/","To rise and fall irregularly in number or amount.","Fuel prices fluctuated wildly throughout the year, complicating budget forecasts.","vary,waver,oscillate","stabilize,remain constant","dalgalanmak"],
+[5,"incremental","adj.","/in-kruh-MEN-tl/","Relating to or denoting an increase or addition, especially one of a series on a fixed scale.","Rather than a single overhaul, the reforms proceeded through incremental change.","gradual,step-by-step,progressive","sudden,drastic,radical","kademeli, aşama aşama artan"],
+[5,"inevitable","adj.","/in-EV-i-tuh-buhl/","Certain to happen; unavoidable.","Given the outdated equipment, a breakdown was almost inevitable.","unavoidable,certain,inescapable","avoidable,uncertain,preventable","kaçınılmaz"],
+[5,"mitigate","v.","/MIT-i-geyt/","To make less severe, serious, or painful.","Planting trees along the riverbank helped mitigate the effects of erosion.","alleviate,lessen,ease","aggravate,worsen,intensify","hafifletmek"],
+[5,"mutate","v.","/MYOO-teyt/","To change in form or nature.","The virus mutated rapidly, complicating efforts to develop an effective vaccine.","transform,alter,change","remain constant,stay fixed","mutasyona uğramak"],
+[5,"obsolete","adj.","/ob-suh-LEET/","No longer produced or used; out of date.","The factory's machinery had become obsolete within just a few years of installation.","outdated,antiquated,outmoded","current,modern,up-to-date","eskimiş, geçerliliğini yitirmiş"],
+[5,"permeate","v.","/PUR-mee-eyt/","To spread throughout something; to pervade.","A sense of cautious optimism permeated the newsroom after the announcement.","pervade,saturate,infuse","(no direct antonym; contrast: exclude)","her yana yayılmak, sızmak"],
+[5,"perpetuate","v.","/per-PECH-oo-eyt/","To make something continue indefinitely.","Critics argue the policy perpetuates inequality rather than resolving it.","prolong,sustain,continue","end,terminate,abolish","sürdürmek, devam ettirmek"],
+[5,"precipitate","v.","/prih-SIP-i-teyt/","To cause an event or situation to happen suddenly or prematurely.","The assassination precipitated a chain of alliances that led to war.","trigger,provoke,hasten","delay,prevent,forestall","aniden tetiklemek"],
+[5,"proliferate","v.","/pruh-LIF-uh-reyt/","To increase rapidly in number.","Fake news sites proliferated across social media during the election cycle.","multiply,spread,increase","decrease,diminish,dwindle","hızla çoğalmak"],
+[5,"rejuvenate","v.","/rih-JOO-vuh-neyt/","To give new energy or vigor to; to make young again.","The renovation rejuvenated the neglected waterfront district.","revitalize,renew,refresh","exhaust,deplete,drain","canlandırmak, gençleştirmek"],
+[5,"relegate","v.","/REL-i-geyt/","To assign an inferior rank or position to.","After the merger, the once-central department was relegated to a minor role.","demote,downgrade,marginalize","promote,elevate,advance","alt konuma indirmek"],
+[5,"revamp","v.","/ree-VAMP/","To give new and improved form, structure, or appearance to.","The airline revamped its loyalty program after years of customer complaints.","overhaul,renovate,restructure","leave unchanged,neglect","yenilemek, elden geçirmek"],
+[5,"stagnate","v.","/STAG-neyt/","To fail to develop, progress, or advance; to become stale.","Wages stagnated for nearly a decade despite rising productivity.","stall,plateau,languish","flourish,grow,progress","durgunlaşmak"],
+[5,"subside","v.","/suhb-SAHYD/","To become less intense, violent, or severe.","The floodwaters gradually subsided over the following week.","abate,diminish,wane","intensify,escalate,increase","yatışmak, hafiflemek"],
+[5,"supersede","v.","/soo-per-SEED/","To take the place of something previously in use.","The new safety standard superseded the outdated regulation from the 1980s.","replace,supplant,succeed","retain,preserve,keep","yerine geçmek"],
+[5,"surge","v.","/surj/","To increase suddenly and powerfully.","Applications surged after the university dropped its testing requirement.","spike,swell,escalate","plummet,decline,drop","aniden yükselmek"],
+[5,"transient","adj.","/TRAN-shuhnt/","Lasting only for a short time; impermanent.","The euphoria of the win proved transient once the team's next loss arrived.","temporary,fleeting,ephemeral","permanent,lasting,enduring","geçici"],
+[5,"transmute","v.","/trans-MYOOT/","To change in form, nature, or substance.","Alchemists once sought a method to transmute base metals into gold.","transform,convert,alter","preserve,maintain","dönüştürmek"],
+[5,"underpin","v.","/uhn-der-PIN/","To support, justify, or form the basis for something.","Solid empirical data underpins the report's most controversial recommendation.","support,sustain,bolster","undermine,weaken,destabilize","temelini oluşturmak, desteklemek"],
+[5,"unprecedented","adj.","/uhn-PRES-i-den-tid/","Never done or known before.","The company reported unprecedented growth following the product launch.","unparalleled,unheard-of,novel","common,usual,precedented","eşi görülmemiş"],
+[5,"upheaval","n.","/uhp-HEE-vuhl/","A violent or sudden change or disruption.","The political upheaval left the region without a stable government for months.","turmoil,disruption,unrest","stability,calm,order","altüst oluş, büyük kargaşa"],
+[5,"vestige","n.","/VES-tij/","A remaining trace or sign of something that once existed.","The crumbling wall was the last vestige of the fortress that once stood there.","remnant,trace,relic","(no direct antonym)","kalıntı, iz"],
+[5,"wane","v.","/weyn/","To decrease in size, extent, or intensity.","Public interest in the scandal began to wane after a few weeks.","diminish,decline,fade","wax,increase,grow","azalmak, sönükleşmek"],
+[5,"wax","v.","/waks/","To increase gradually in size or intensity, especially of the moon.","As the moon waxed toward full, the tides grew noticeably stronger.","grow,increase,swell","wane,decrease,diminish","büyümek, artmak"],
+[5,"accrue","v.","/uh-KROO/","To accumulate or receive payments or benefits over time.","Interest accrues monthly on the outstanding balance.","accumulate,build up,collect","dissipate,disperse,deplete","zamanla birikmek"],
+[5,"converge","v.","/kuhn-VURJ/","To come together from different directions to meet at a point.","Evidence from three independent fields converged on the same conclusion.","meet,unite,merge","diverge,separate,scatter","bir noktada birleşmek"],
+[5,"diverge","v.","/dih-VURJ/","To develop in different directions from a common point.","Their career paths diverged sharply after graduation.","separate,split,differ","converge,unite,merge","ayrılmak, farklılaşmak"],
+[5,"dissipate","v.","/DIS-uh-peyt/","To disperse or cause to disperse; to scatter and disappear.","The morning fog dissipated within an hour of sunrise.","disperse,scatter,evaporate","gather,accumulate,concentrate","dağılıp yok olmak"],
+[5,"germinate","v.","/JUR-muh-neyt/","To begin to grow or sprout; to develop.","The idea for the company germinated during a long conversation on a night train.","sprout,develop,originate","wither,die,decay","filizlenmek"],
+[5,"metamorphosis","n.","/met-uh-MAWR-fuh-sis/","A complete change of form or nature.","The neighborhood's metamorphosis from industrial zone to arts district took nearly twenty years.","transformation,transition,conversion","stagnation,constancy","başkalaşım, köklü dönüşüm"],
+[5,"overhaul","v.","/oh-ver-HAWL/","To thoroughly examine and repair or improve something.","The government overhauled the outdated visa system after years of complaints.","revamp,renovate,restructure","preserve,maintain unchanged","baştan sona yenilemek"],
+[5,"precursor","n.","/pri-KUR-ser/","A person or thing that comes before another, often as a forerunner.","The telegraph is often considered a precursor to modern telecommunications.","forerunner,predecessor,antecedent","successor,descendant,follower","öncü, haberci"],
+[5,"trajectory","n.","/truh-JEK-tuh-ree/","The path followed by an object or, figuratively, the course of a development.","The company's upward trajectory reversed sharply after the scandal broke.","path,course,progression","(no direct antonym)","izlenen yol, gidişat"],
+[6,"autonomy","n.","/aw-TON-uh-mee/","The right or condition of self-government; independence.","The region was granted greater autonomy over its education policy in 1998.","independence,self-rule,self-determination","dependence,subjugation,control","özerklik"],
+[6,"bureaucracy","n.","/byoo-ROK-ruh-see/","A system of government or organization with many rules and hierarchical offices.","Applicants complained that the visa process was buried in unnecessary bureaucracy.","red tape,administration,officialdom","efficiency,streamlining","bürokrasi"],
+[6,"coercion","n.","/koh-UR-zhuhn/","The practice of persuading someone to do something by force or threats.","The confession was later ruled inadmissible because it had been obtained through coercion.","compulsion,force,pressure","persuasion,consent,cooperation","zorlama, baskı"],
+[6,"commodity","n.","/kuh-MOD-i-tee/","A raw material or primary agricultural product that can be bought and sold.","Wheat prices, like those of most commodities, fluctuate with global supply and demand.","product,goods,merchandise","(no direct antonym)","emtia, meta"],
+[6,"consensus","n.","/kuhn-SEN-suhs/","General agreement among a group of people.","After hours of debate, the board finally reached a consensus on the budget.","agreement,unanimity,accord","disagreement,discord,dissent","fikir birliği, uzlaşı"],
+[6,"constituency","n.","/kuhn-STICH-oo-uhn-see/","A body of voters in a specified area who elect a representative.","The senator's rural constituency depends heavily on agricultural subsidies.","electorate,voters,district","(no direct antonym)","seçmen kitlesi"],
+[6,"demographic","adj.","/dem-uh-GRAF-ik/","Relating to the structure of populations, especially by age, income, or ethnicity.","Advertisers targeted the campaign at a specific demographic group of young professionals.","population-based,statistical","(no direct antonym)","demografik"],
+[6,"despot","n.","/DES-puht/","A ruler with absolute power, especially one who exercises it cruelly.","The novel chronicles a small kingdom's slow descent under a paranoid despot.","tyrant,autocrat,dictator","democrat,liberator","despot, zorba"],
+[6,"dissent","n.","/dih-SENT/","The holding or expression of opinions at variance with those commonly held.","The judge's dissent argued that the majority had misread the statute entirely.","disagreement,objection,opposition","agreement,consent,accord","muhalefet, karşı görüş"],
+[6,"egalitarian","adj.","/ih-gal-i-TAIR-ee-uhn/","Believing in or based on the principle that all people are equal.","The commune was founded on strictly egalitarian principles, with no formal leadership.","equal,equitable,classless","elitist,hierarchical,inegalitarian","eşitlikçi"],
+[6,"embargo","n.","/em-BAHR-goh/","An official ban on trade or other commercial activity with a particular country.","The oil embargo forced several nations to rapidly diversify their energy supplies.","ban,restriction,prohibition","permission,sanction (approval)","ambargo"],
+[6,"enfranchise","v.","/en-FRAN-chahyz/","To give someone the right to vote.","The amendment enfranchised millions of citizens who had previously been excluded from voting.","empower,grant suffrage to","disenfranchise,disempower","oy hakkı tanımak"],
+[6,"hegemony","n.","/hih-JEM-uh-nee/","Leadership or dominance, especially by one state or group over others.","Historians debate how long American economic hegemony can be expected to last.","dominance,supremacy,control","subordination,equality","hegemonya, üstünlük"],
+[6,"hierarchy","n.","/HAHY-uh-rahr-kee/","A system in which members are ranked according to relative status or authority.","The company's rigid hierarchy made it difficult for junior staff to raise concerns.","ranking,chain of command,order","equality,egalitarianism","hiyerarşi"],
+[6,"ideology","n.","/ahy-dee-OL-uh-jee/","A system of ideas and ideals forming the basis of an economic or political theory.","The party's founding ideology has shifted considerably over the last fifty years.","doctrine,philosophy,belief system","(no direct antonym)","ideoloji"],
+[6,"incumbent","n.","/in-KUHM-buhnt/","The current holder of an official position or office.","The incumbent faced a surprisingly close race against a first-time challenger.","officeholder,titleholder","challenger,contender","görevdeki kişi, mevcut yetkili"],
+[6,"indigenous","adj.","/in-DIJ-uh-nuhs/","Originating or occurring naturally in a particular place; native.","The policy aims to protect the land rights of indigenous communities.","native,aboriginal,local","foreign,introduced,non-native","yerli, o bölgeye özgü"],
+[6,"infrastructure","n.","/IN-fruh-struhk-cher/","The basic physical systems of a country, such as roads, bridges, and utilities.","Decades of underinvestment left the region's infrastructure badly outdated.","framework,foundation,facilities","(no direct antonym)","altyapı"],
+[6,"jurisdiction","n.","/joor-is-DIK-shuhn/","The official power to make legal decisions and judgments.","The case was dismissed because the court lacked jurisdiction over the matter.","authority,control,dominion","(no direct antonym)","yargı yetkisi"],
+[6,"legislation","n.","/lej-is-LEY-shuhn/","Laws, considered collectively, or the process of making them.","The new legislation requires companies to disclose their carbon emissions annually.","law,statute,regulation","(no direct antonym)","yasama, mevzuat"],
+[6,"legitimate","adj.","/lih-JIT-uh-mit/","Conforming to the law or to rules; able to be defended with logic or justification.","Whether the election was legitimate remained disputed for months afterward.","valid,lawful,justified","illegitimate,unlawful,unfounded","meşru, yasal"],
+[6,"mandate","n.","/MAN-deyt/","An official order or commission to do something; authority to carry out a policy.","The landslide victory gave the new government a clear mandate for reform.","authorization,directive,sanction","prohibition,ban","yetki, resmi görev"],
+[6,"mercantile","adj.","/MUR-kuhn-teel/","Relating to trade or commerce.","The city's fortune was built on centuries of mercantile activity along the coast.","commercial,trade-related,economic","(no direct antonym)","ticari"],
+[6,"monopoly","n.","/muh-NOP-uh-lee/","Exclusive control of a commodity or service in a particular market.","Regulators broke up the company's monopoly on regional freight rail.","exclusivity,control,dominance","competition,open market","tekel"],
+[6,"nationalism","n.","/NASH-uh-nl-iz-uhm/","Identification with one's own nation and support for its interests, sometimes to the exclusion of others.","Rising nationalism complicated efforts to negotiate the regional trade agreement.","patriotism,national pride","internationalism,globalism","milliyetçilik"],
+[6,"oligarchy","n.","/OL-i-gahr-kee/","A small group of people having control of a country or organization.","Critics argue the country is functionally an oligarchy run by a handful of families.","plutocracy,elite rule","democracy","oligarşi, azınlık yönetimi"],
+[6,"paradigm","n.","/PAR-uh-dahym/","A typical example or pattern of something; a model.","The discovery forced a paradigm shift in how scientists understood the disease.","model,framework,pattern","(no direct antonym)","paradigma, örnek model"],
+[6,"partisan","adj.","/PAHR-ti-zuhn/","Prejudiced in favor of a particular cause; strongly supporting one party.","The vote split along strictly partisan lines, with no crossover support.","biased,factional,one-sided","impartial,nonpartisan,neutral","taraflı, bir gruba bağlı"],
+[6,"philanthropy","n.","/fi-LAN-thruh-pee/","The practice of promoting the welfare of others through generous donations.","Her philanthropy funded three new libraries in underserved neighborhoods.","charity,generosity,humanitarianism","selfishness,miserliness","hayırseverlik"],
+[6,"plutocracy","n.","/ploo-TOK-ruh-see/","Government by the wealthy.","The pamphlet warned that unchecked campaign spending was turning democracy into plutocracy.","rule by the wealthy","meritocracy,democracy","zenginlerin yönetimi"],
+[6,"populism","n.","/POP-yuh-liz-uhm/","Political ideas and activities intended to represent ordinary people's interests against elites.","The candidate's populism resonated strongly with voters who felt ignored by the capital.","grassroots politics","elitism","popülizm"],
+[6,"propaganda","n.","/prop-uh-GAN-duh/","Biased or misleading information used to promote a particular cause or viewpoint.","Wartime propaganda often exaggerated both victories and enemy atrocities.","misinformation,spin,indoctrination","objective reporting,fact","propaganda"],
+[6,"protocol","n.","/PROH-tuh-kawl/","A set of official procedures or rules; a formal agreement between states.","Hospital protocol requires two staff members to verify medication before it is administered.","procedure,convention,code","(no direct antonym)","protokol, resmi usul"],
+[6,"ratify","v.","/RAT-uh-fahy/","To confirm or sanction a treaty, contract, or agreement formally.","Only twelve member states had ratified the treaty by the deadline.","approve,confirm,endorse","reject,repeal,void","resmen onaylamak"],
+[6,"reciprocity","n.","/res-uh-PROS-i-tee/","The practice of exchanging things with others for mutual benefit.","The trade deal was built on reciprocity, with both nations lowering tariffs equally.","mutual exchange,give-and-take","one-sidedness","karşılıklılık"],
+[6,"regime","n.","/rey-ZHEEM/","A government, especially an authoritarian one; a system or planned way of doing things.","The exiled journalist continued reporting on abuses under the regime from abroad.","government,administration,rule","(no direct antonym)","rejim"],
+[6,"sanction","n.","/SANGK-shuhn/","Official permission for an action, or a penalty imposed for violating a law or rule.","The international community imposed economic sanctions in response to the invasion.","penalty,restriction / (or) approval, endorsement","reward / (or) prohibition","yaptırım; resmi onay"],
+[6,"secular","adj.","/SEK-yuh-ler/","Not connected with religious or spiritual matters.","The new constitution established a secular state with no official religion.","nonreligious,worldly,temporal","religious,sacred,spiritual","laik"],
+[6,"sovereignty","n.","/SOV-rin-tee/","Supreme power or authority; the authority of a state to govern itself.","The treaty was controversial because critics felt it undermined national sovereignty.","independence,autonomy,self-rule","subjugation,dependency","egemenlik"],
+[6,"stipulate","v.","/STIP-yuh-leyt/","To demand or specify a requirement as part of an agreement.","The lease stipulates that rent must be paid by the first of each month.","specify,require,mandate","(no direct antonym)","şart koşmak"],
+[6,"subsidize","v.","/SUHB-si-dahyz/","To support financially, typically to keep prices low.","The government subsidizes public transportation to encourage its use over private cars.","fund,finance,support","tax,charge fully","sübvanse etmek, mali destek sağlamak"],
+[6,"tariff","n.","/TAR-if/","A tax imposed on imported or exported goods.","New tariffs on steel imports raised production costs for domestic manufacturers.","duty,levy,toll","subsidy","gümrük vergisi"],
+[6,"totalitarian","adj.","/toh-tal-i-TAIR-ee-uhn/","Relating to a centralized, dictatorial system of government demanding total subservience.","The novel depicts a totalitarian state that monitors even its citizens' private thoughts.","authoritarian,dictatorial,autocratic","democratic,liberal,free","totaliter"],
+[6,"utilitarian","adj.","/yoo-til-i-TAIR-ee-uhn/","Designed to be useful rather than attractive; relating to the ethical theory that the right action maximizes overall happiness.","The dormitory's utilitarian design prioritized function over aesthetic appeal.","practical,functional,pragmatic","impractical,decorative,ornamental","faydacı, işlevsel"],
+[6,"viable","adj.","/VAHY-uh-buhl/","Capable of working successfully; feasible.","The engineers concluded that the proposed bridge design was not economically viable.","feasible,workable,practicable","unviable,unworkable,impractical","uygulanabilir, sürdürülebilir"],
+[6,"affluence","n.","/AF-loo-uhns/","The state of having a great deal of money; wealth.","The suburb's sudden affluence transformed it within a single generation.","wealth,prosperity,opulence","poverty,destitution,penury","refah, bolluk"],
+[6,"recession","n.","/rih-SESH-uhn/","A period of temporary economic decline during which trade and industrial activity are reduced.","Unemployment rose sharply during the recession that followed the housing crash.","downturn,slump,decline","boom,growth,expansion","ekonomik durgunluk"],
+[6,"deficit","n.","/DEF-uh-sit/","The amount by which spending exceeds income; a shortage.","The government ran a record budget deficit after the emergency relief spending.","shortfall,shortage,deficiency","surplus,excess","bütçe açığı, eksi"],
+[6,"surplus","n.","/SUR-pluhs/","An amount of something left over when requirements have been met.","The harvest produced a large surplus, allowing the country to export grain for the first time.","excess,glut,overabundance","deficit,shortage,shortfall","fazlalık, artı bakiye"],
+[6,"embezzle","v.","/em-BEZ-uhl/","To steal or misappropriate money placed in one's trust or belonging to one's employer.","The treasurer was convicted of embezzling nearly a million dollars over a decade.","misappropriate,defraud,pilfer","repay,restore","zimmetine geçirmek"],
+[7,"biodegradable","adj.","/bahy-oh-dih-GREY-duh-buhl/","Capable of being broken down naturally by bacteria or other living organisms.","The company switched to biodegradable packaging to reduce landfill waste.","compostable,decomposable","non-biodegradable,persistent","doğada kolayca çözünebilen"],
+[7,"carcinogenic","adj.","/kahr-suh-noh-JEN-ik/","Having the potential to cause cancer.","Regulators banned the additive after studies found it to be carcinogenic in high doses.","cancer-causing","non-carcinogenic,benign","kanserojen"],
+[7,"contaminate","v.","/kuhn-TAM-uh-neyt/","To make something impure by exposure to a poisonous or polluting substance.","Runoff from the factory contaminated the river for miles downstream.","pollute,taint,poison","purify,cleanse,decontaminate","kirletmek"],
+[7,"deplete","v.","/dih-PLEET/","To reduce something in quantity, especially a natural resource.","Overfishing has depleted the region's cod population to historic lows.","exhaust,drain,diminish","replenish,restore,refill","tüketmek, azaltmak"],
+[7,"ecosystem","n.","/EE-koh-sis-tuhm/","A biological community of interacting organisms and their physical environment.","Introducing a non-native predator disrupted the entire lake's ecosystem.","habitat,biome,environment","(no direct antonym)","ekosistem"],
+[7,"erosion","n.","/ih-ROH-zhuhn/","The gradual wearing away of soil or rock by water, wind, or ice.","Coastal erosion has claimed nearly a meter of shoreline every year since 2010.","wearing away,degradation,attrition","deposition,accumulation,buildup","erozyon, aşınma"],
+[7,"fauna","n.","/FAW-nuh/","The animals of a particular region, habitat, or geological period.","The reserve was established to protect the region's unique fauna, including several endangered species.","animal life,wildlife","flora (plant life)","bir bölgenin hayvan varlığı"],
+[7,"finite","adj.","/FAHY-nahyt/","Having limits or bounds; not infinite.","Fossil fuels are a finite resource that cannot sustain indefinite consumption.","limited,bounded,restricted","infinite,unlimited,boundless","sınırlı, sonlu"],
+[7,"flora","n.","/FLAWR-uh/","The plants of a particular region, habitat, or period.","The botanist spent decades cataloging the flora of the rainforest canopy.","plant life,vegetation","fauna (animal life)","bir bölgenin bitki örtüsü"],
+[7,"fossilize","v.","/FOS-uh-lahyz/","To turn into or become preserved as a fossil.","The bones fossilized over millions of years under layers of sediment.","petrify,preserve,harden","decay,decompose","fosilleşmek"],
+[7,"habitat","n.","/HAB-i-tat/","The natural home or environment of an animal, plant, or organism.","Deforestation continues to destroy the natural habitat of countless species.","environment,ecosystem,territory","(no direct antonym)","doğal yaşam alanı"],
+[7,"innate","adj.","/ih-NEYT/","Inborn; natural, rather than learned or acquired.","Some linguists argue humans have an innate capacity for grammar.","inborn,inherent,natural","acquired,learned,cultivated","doğuştan gelen"],
+[7,"inorganic","adj.","/in-awr-GAN-ik/","Not consisting of or deriving from living matter.","The soil sample contained a mix of organic material and inorganic minerals.","mineral,non-living","organic","inorganik, cansız kökenli"],
+[7,"intrinsic","adj.","/in-TRIN-sik/","Belonging naturally; essential.","The gemstone's intrinsic value lies in its rarity, not merely its appearance.","inherent,innate,fundamental","extrinsic,external,acquired","özünde/doğasında var olan"],
+[7,"metabolism","n.","/muh-TAB-uh-liz-uhm/","The chemical processes occurring within a living organism to maintain life.","Regular exercise can have a modest effect on resting metabolism.","(no single-word synonym)","(no direct antonym)","metabolizma"],
+[7,"organism","n.","/AWR-guh-niz-uhm/","An individual animal, plant, or single-celled life form.","Even a simple single-celled organism must regulate its internal environment.","creature,life form,being","(no direct antonym)","organizma, canlı"],
+[7,"permeable","adj.","/PUR-mee-uh-buhl/","Allowing liquids or gases to pass through.","The rock's permeable surface allowed groundwater to seep through steadily.","porous,penetrable","impermeable,impervious,sealed","geçirgen"],
+[7,"photosynthesis","n.","/foh-toh-SIN-thuh-sis/","The process by which green plants use sunlight to synthesize nutrients from carbon dioxide and water.","Photosynthesis rates drop sharply when leaves are shaded for extended periods.","(no single-word synonym)","(no direct antonym)","fotosentez"],
+[7,"pollutant","n.","/puh-LOO-tnt/","A substance that contaminates air, water, or soil.","Vehicle emissions remain the leading source of airborne pollutants in the city.","contaminant,toxin,impurity","(no direct antonym)","kirletici madde"],
+[7,"porous","adj.","/PAWR-uhs/","Having tiny holes that allow air or liquid to pass through.","The porous limestone absorbed rainwater far faster than the surrounding clay.","permeable,absorbent,penetrable","impermeable,solid,dense","gözenekli"],
+[7,"prevalent","adj.","/PREV-uh-luhnt/","Widespread in a particular area or at a particular time.","Vitamin D deficiency is especially prevalent in regions with limited winter sunlight.","widespread,common,rampant","rare,uncommon,scarce","yaygın"],
+[7,"quantify","v.","/KWON-tuh-fahy/","To express or measure the quantity of something.","Researchers struggled to quantify the long-term impact of the policy precisely.","measure,calculate,gauge","(no direct antonym)","sayısal olarak ölçmek"],
+[7,"sediment","n.","/SED-uh-muhnt/","Matter that settles to the bottom of a liquid; material deposited by water, wind, or ice.","Layers of sediment on the riverbed revealed centuries of seasonal flooding.","deposit,silt,residue","(no direct antonym)","tortu, çökelti"],
+[7,"symbiosis","n.","/sim-bee-OH-sis/","A mutually beneficial relationship between two different organisms.","The relationship between the clownfish and the anemone is a classic example of symbiosis.","interdependence,mutualism","parasitism,antagonism","simbiyoz, karşılıklı yarar ilişkisi"],
+[7,"synthesize","v.","/SIN-thuh-sahyz/","To combine separate elements to form a coherent whole; to produce chemically.","The lab successfully synthesized a compound that mimics the natural hormone.","combine,integrate,fuse","separate,decompose,break down","sentezlemek"],
+[7,"taxonomy","n.","/tak-SON-uh-mee/","The branch of science concerned with classification, especially of organisms.","Modern DNA analysis has reshaped the taxonomy of many bird species.","classification,categorization","(no direct antonym)","sınıflandırma bilimi"],
+[7,"terrestrial","adj.","/tuh-RES-tree-uhl/","Relating to the earth or dry land, as opposed to sea or air.","Unlike its aquatic relatives, this species spends most of its life in terrestrial habitats.","earthly,land-based","aquatic,marine,extraterrestrial","karasal"],
+[7,"toxin","n.","/TOK-sin/","A poisonous substance produced by a living organism.","The algae bloom released a toxin that killed thousands of fish within days.","poison,venom,toxicant","antidote,remedy","toksin, zehir"],
+[7,"volatile","adj.","/VOL-uh-tl/","Liable to change rapidly and unpredictably; easily evaporated at normal temperatures.","The volatile compound evaporates almost instantly when exposed to air.","unstable,unpredictable,erratic","stable,constant,steady","değişken, uçucu"],
+[7,"adaptation","n.","/ad-ap-TEY-shuhn/","A change or process of change by which an organism becomes better suited to its environment.","The desert fox's large ears are an adaptation for releasing excess body heat.","adjustment,modification","(no direct antonym)","uyum sağlama"],
+[7,"biosphere","n.","/BAHY-uh-sfeer/","The regions of the surface and atmosphere of the earth occupied by living organisms.","Human activity now affects nearly every part of Earth's biosphere.","(no single-word synonym)","(no direct antonym)","biyosfer"],
+[7,"carnivorous","adj.","/kahr-NIV-er-uhs/","Feeding on the flesh of other animals.","Most carnivorous plants supplement poor soil nutrition by trapping insects.","meat-eating,predatory","herbivorous,plant-eating","etobur"],
+[7,"climatic","adj.","/klahy-MAT-ik/","Relating to climate.","Climatic shifts over centuries have transformed the region from forest to grassland.","weather-related,meteorological","(no direct antonym)","iklimsel"],
+[7,"degradation","n.","/deg-ruh-DEY-shuhn/","The process of deterioration, especially of environmental quality.","Soil degradation from intensive farming has reduced crop yields across the valley.","deterioration,decline,decay","improvement,restoration,enhancement","bozulma, kalite kaybı"],
+[7,"dormant","adj.","/DAWR-muhnt/","Temporarily inactive; in a state of rest or inactivity.","The volcano had been dormant for over three centuries before its recent eruption.","inactive,inert,quiescent","active,alert,awake","uykuda, geçici olarak etkisiz"],
+[7,"genome","n.","/JEE-nohm/","The complete set of genetic material present in an organism.","Sequencing the human genome took over a decade and billions of dollars.","genetic code","(no direct antonym)","genom"],
+[7,"geological","adj.","/jee-uh-LOJ-i-kuhl/","Relating to the geology of the earth.","The canyon reveals millions of years of geological history in its exposed layers.","earth-related,geophysical","(no direct antonym)","jeolojik"],
+[7,"herbivore","n.","/HUR-buh-vawr/","An animal that feeds mainly on plants.","Large herbivores like elephants play a critical role in shaping grassland ecosystems.","plant-eater","carnivore","otobur"],
+[7,"hibernate","v.","/HAHY-ber-neyt/","To spend the winter in a dormant state, especially in the case of animals.","Bears build up fat reserves in autumn before they hibernate through the winter.","overwinter,lie dormant","(no direct antonym)","kış uykusuna yatmak"],
+[7,"irradiate","v.","/ih-REY-dee-eyt/","To expose to radiation.","The equipment is used to irradiate food, extending its shelf life by killing bacteria.","expose to radiation","shield,protect","ışınlamak"],
+[7,"luminous","adj.","/LOO-muh-nuhs/","Giving off light; bright or shining, especially in the dark.","Deep-sea creatures often develop luminous organs to attract prey in total darkness.","glowing,radiant,bright","dark,dim,dull","ışık saçan, parlak"],
+[7,"magnitude","n.","/MAG-ni-tood/","The great size or extent of something; the measured intensity of an event, such as an earthquake.","Scientists were stunned by the magnitude of the ice sheet's retreat over just one decade.","size,extent,scale","insignificance,triviality","büyüklük, şiddet"],
+[7,"molecular","adj.","/muh-LEK-yuh-ler/","Relating to or consisting of molecules.","Advances in molecular biology have transformed how diseases are diagnosed.","chemical,microscopic","(no direct antonym)","moleküler"],
+[7,"nocturnal","adj.","/nok-TUR-nl/","Relating to or occurring at night; active at night.","Owls, being nocturnal hunters, have exceptional low-light vision.","night-active","diurnal (day-active)","geceleyin aktif olan"],
+[7,"nutrient","n.","/NOO-tree-uhnt/","A substance that provides nourishment essential for growth and health.","Excess fertilizer runoff floods rivers with nutrients, triggering harmful algal blooms.","nourishment,nutriment","toxin,poison","besin öğesi"],
+[7,"organic","adj.","/awr-GAN-ik/","Relating to or derived from living matter; grown without synthetic chemicals.","The farm has been certified organic for over a decade.","natural,biological","inorganic,synthetic,artificial","organik"],
+[7,"oxidize","v.","/OK-si-dahyz/","To combine or become combined chemically with oxygen.","Exposed iron will oxidize and rust within weeks in a humid climate.","rust,corrode","reduce (chemically)","oksitlenmek"],
+[7,"parasite","n.","/PAR-uh-sahyt/","An organism that lives on or in another organism at the host's expense.","The parasite alters the behavior of its host to increase its own chances of transmission.","freeloader,pest","host,symbiont","parazit, asalak"],
+[7,"pathogen","n.","/PATH-uh-juhn/","A bacterium, virus, or other microorganism that can cause disease.","Improved sanitation dramatically reduced the spread of waterborne pathogens.","germ,microbe,disease agent","(no direct antonym)","patojen, hastalık yapıcı mikrop"],
+[7,"thermal","adj.","/THUR-muhl/","Relating to or caused by heat.","Birds of prey use rising thermal currents to soar for hours without flapping their wings.","heat-related","(no direct antonym)","ısıyla ilgili"],
+[8,"abstraction","n.","/ab-STRAK-shuhn/","An idea or concept not associated with any specific instance; the quality of dealing with ideas rather than events.","The lecture moved to a level of abstraction that lost most first-year students.","concept,generalization,theory","concreteness,specificity","soyutlama"],
+[8,"aesthetic","adj.","/es-THET-ik/","Concerned with beauty or the appreciation of beauty.","The building's aesthetic appeal owes much to its minimalist facade.","artistic,visual,tasteful","unaesthetic,ugly","estetik"],
+[8,"archetype","n.","/AHR-ki-tahyp/","A very typical example of a certain person or thing; an original model.","The novel's protagonist has become an archetype for the reluctant hero in modern fiction.","model,prototype,template","(no direct antonym)","arketip, tipik örnek"],
+[8,"axiom","n.","/AK-see-uhm/","A statement regarded as self-evidently true, requiring no proof.","It is taken as an axiom in economics that people respond to incentives.","principle,truism,postulate","fallacy,misconception","aksiyom, kanıt gerektirmeyen ilke"],
+[8,"cognition","n.","/kog-NISH-uhn/","The mental action or process of acquiring knowledge and understanding through thought.","Sleep deprivation has a measurable effect on cognition and decision-making.","thinking,perception,reasoning","(no direct antonym)","biliş, zihinsel kavrayış"],
+[8,"conceptual","adj.","/kuhn-SEP-choo-uhl/","Relating to ideas or concepts, especially abstract ones.","The artist's conceptual work prioritizes the idea behind a piece over its craftsmanship.","abstract,theoretical,notional","concrete,tangible,practical","kavramsal"],
+[8,"constitute","v.","/KON-sti-toot/","To be a part of a whole; to be equivalent to; to establish formally.","Repeated late payments constitute a breach of the rental agreement.","comprise,form,make up","(no direct antonym)","oluşturmak, teşkil etmek"],
+[8,"conundrum","n.","/kuh-NUHN-druhm/","A confusing and difficult problem or question.","Balancing privacy and security online remains a genuine conundrum for policymakers.","puzzle,dilemma,riddle","(no direct antonym)","çözülmesi güç sorun"],
+[8,"determinism","n.","/dih-TUR-muh-niz-uhm/","The philosophical doctrine that all events are determined by previously existing causes.","Strict determinism raises uncomfortable questions about free will and moral responsibility.","fatalism,necessitarianism","free will,indeterminism","determinizm"],
+[8,"dialectic","n.","/dahy-uh-LEK-tik/","A method of argument based on examining and reconciling contradictory ideas.","The seminar used a dialectic approach, forcing students to defend both sides of the issue.","debate,discourse,argumentation","(no direct antonym)","diyalektik"],
+[8,"dichotomy","n.","/dahy-KOT-uh-mee/","A division or contrast between two things that are represented as opposed or entirely different.","The film challenges the simple dichotomy between hero and villain.","division,contrast,split","unity,similarity","ikiye ayrılma, keskin ikilik"],
+[8,"dogma","n.","/DAWG-muh/","A principle or set of principles laid down by an authority as incontrovertibly true.","The reformers were accused of straying too far from established religious dogma.","doctrine,creed,tenet","skepticism,doubt","dogma"],
+[8,"dualism","n.","/DOO-uh-liz-uhm/","The division of something into two often contrasting parts; the belief that mind and body are distinct.","Descartes' mind-body dualism has shaped centuries of philosophical debate.","duality,bipartition","monism,unity","düalizm, ikicilik"],
+[8,"entity","n.","/EN-ti-tee/","A thing with distinct and independent existence.","The subsidiary operates as a legally separate entity from its parent company.","being,object,organization","(no direct antonym)","varlık, bağımsız birim"],
+[8,"epiphany","n.","/ih-PIF-uh-nee/","A sudden, striking realization or moment of insight.","She had an epiphany midway through the lecture that changed her entire research direction.","revelation,insight,realization","confusion,bewilderment","ani aydınlanma anı"],
+[8,"esoteric","adj.","/es-uh-TER-ik/","Intended for or understood by only a small, specialized group.","The seminar's esoteric terminology alienated students outside the philosophy department.","obscure,arcane,abstruse","accessible,mainstream,common","sadece dar bir çevrenin anladığı"],
+[8,"ethos","n.","/EE-thos/","The characteristic spirit or set of beliefs of a community, culture, or era.","The company's ethos emphasizes long-term thinking over quarterly profit.","spirit,character,values","(no direct antonym)","bir topluluğun temel karakteri/değerleri"],
+[8,"existential","adj.","/eg-zi-STEN-shuhl/","Relating to human existence, especially concerning the meaning and purpose of life.","The film explores an existential crisis brought on by sudden, unexpected wealth.","philosophical,fundamental","(no direct antonym)","varoluşsal"],
+[8,"hedonism","n.","/HEED-n-iz-uhm/","The pursuit of pleasure as the highest good or most important goal in life.","The novel satirizes the hedonism of a society obsessed with instant gratification.","self-indulgence,pleasure-seeking","asceticism,self-denial","hazcılık"],
+[8,"holistic","adj.","/hoh-LIS-tik/","Characterized by comprehensive understanding of interconnected parts as a whole.","The clinic promotes a holistic approach to health, addressing diet, sleep, and stress together.","comprehensive,integrated,whole","fragmented,partial,narrow","bütüncül"],
+[8,"idealism","n.","/ahy-DEE-uh-liz-uhm/","The practice of forming or pursuing ideals, often unrealistically.","Youthful idealism gave way to a more pragmatic outlook after years in government.","optimism,idealization","cynicism,pragmatism,realism","idealizm"],
+[8,"immutable","adj.","/ih-MYOO-tuh-buhl/","Unchanging over time or unable to be changed.","The scientists treated the constant as an immutable feature of the universe.","unchangeable,fixed,permanent","mutable,changeable,variable","değişmez"],
+[8,"intangible","adj.","/in-TAN-juh-buhl/","Unable to be touched or grasped; not having physical presence.","Brand loyalty is an intangible asset that rarely appears on a balance sheet.","abstract,immaterial,elusive","tangible,concrete,physical","soyut, elle tutulamaz"],
+[8,"introspection","n.","/in-truh-SPEK-shuhn/","The examination of one's own thoughts and feelings.","Years of quiet introspection led him to change careers entirely.","self-reflection,self-examination","extraversion,outward focus","iç gözlem"],
+[8,"juxtapose","v.","/JUHK-stuh-pohz/","To place two things side by side, especially for comparison or contrast.","The exhibit juxtaposes ancient pottery with contemporary sculpture to highlight shared themes.","contrast,compare,align","separate,isolate","yan yana koyup karşılaştırmak"],
+[8,"metaphysical","adj.","/met-uh-FIZ-i-kuhl/","Relating to abstract thought or subjects beyond the physical or natural.","The poem's metaphysical conceits compare romantic love to complex scientific ideas.","abstract,transcendental,philosophical","physical,concrete,material","metafizik"],
+[8,"nihilism","n.","/NAHY-uh-liz-uhm/","The belief that life is without objective meaning, purpose, or value.","The character's nihilism collapses once he unexpectedly falls in love.","meaninglessness,skepticism","idealism,optimism","nihilizm, hiççilik"],
+[8,"normative","adj.","/NAWR-muh-tiv/","Establishing, relating to, or deriving from a standard or norm.","The paper takes a normative stance, arguing what policy should be rather than describing what it is.","prescriptive,standard-setting","descriptive,factual","kural koyucu, normatif"],
+[8,"notion","n.","/NOH-shuhn/","A conception of or belief about something; a general understanding.","The experiment challenged the popular notion that memory works like a video recording.","idea,concept,belief","(no direct antonym)","fikir, kanı"],
+[8,"perception","n.","/per-SEP-shuhn/","The way in which something is regarded, understood, or interpreted; sensory awareness.","Public perception of the industry shifted sharply after the investigative report.","understanding,awareness,view","(no direct antonym)","algı"],
+[8,"phenomenon","n.","/fi-NOM-uh-non/","A fact or situation observed to exist or happen, especially one whose cause is in question.","Researchers still cannot fully explain the phenomenon of ball lightning.","occurrence,event,happening","(no direct antonym)","olgu, fenomen"],
+[8,"precept","n.","/PREE-sept/","A general rule intended to regulate behavior or thought.","The guild operated according to strict precepts governing craftsmanship and pricing.","principle,rule,maxim","(no direct antonym)","ilke, davranış kuralı"],
+[8,"quintessential","adj.","/kwin-tuh-SEN-shuhl/","Representing the most perfect or typical example of a quality or class.","With its rolling hills and stone cottages, the village is quintessential rural England.","typical,archetypal,classic","atypical,unrepresentative","bir şeyin en tipik/mükemmel örneği"],
+[8,"rationale","n.","/rash-uh-NAL/","A set of reasons or a logical basis for a course of action.","The committee never fully explained its rationale for rejecting the proposal.","reasoning,justification,basis","(no direct antonym)","gerekçe, mantıksal dayanak"],
+[8,"reductive","adj.","/rih-DUHK-tiv/","Tending to present a subject in a simplified way that obscures its complexity.","Critics called the documentary's central argument reductive, ignoring key historical context.","oversimplified,simplistic","comprehensive,nuanced","aşırı basitleştirici"],
+[8,"relativism","n.","/REL-uh-tiv-iz-uhm/","The doctrine that knowledge, truth, or morality exist in relation to culture or context, not absolutely.","Moral relativism complicates any attempt to write universal human rights law.","subjectivism","absolutism,objectivism","görecelilik"],
+[8,"sentient","adj.","/SEN-shuhnt/","Able to perceive or feel things; conscious.","The debate centers on whether the AI system could ever become truly sentient.","conscious,aware,perceptive","insentient,unconscious,inanimate","hissedebilen, bilinçli"],
+[8,"solipsism","n.","/SOL-ip-siz-uhm/","The philosophical idea that only one's own mind is sure to exist.","The philosophy course opens with a discussion of solipsism to test students' assumptions about reality.","(no single-word synonym)","(no direct antonym)","tekbencilik"],
+[8,"subjective","adj.","/suhb-JEK-tiv/","Based on or influenced by personal feelings, tastes, or opinions.","Judging the beauty of a poem is inherently subjective.","personal,individual,biased","objective,impartial,factual","öznel"],
+[8,"substantive","adj.","/SUHB-stuhn-tiv/","Having a firm basis in reality; important, meaningful, or considerable.","The two sides made little substantive progress despite hours of talks.","meaningful,significant,real","superficial,trivial,minor","esasa ilişkin, gerçek anlamda önemli"],
+[8,"surreal","adj.","/suh-REEL/","Having the qualities of surrealism; strange, dreamlike, or bizarre.","Watching the familiar street underwater felt utterly surreal.","dreamlike,bizarre,fantastical","ordinary,realistic,mundane","gerçeküstü"],
+[8,"synthesis","n.","/SIN-thuh-sis/","The combination of ideas to form a theory or system; the production of a compound by combining elements.","Her dissertation offers a valuable synthesis of decades of fragmented research.","combination,integration,fusion","analysis,decomposition","sentez, bireşim"],
+[8,"tangible","adj.","/TAN-juh-buhl/","Perceptible by touch; clear and definite, real.","The new policy has yet to produce any tangible improvement in commute times.","concrete,physical,palpable","intangible,abstract,vague","somut, elle tutulur"],
+[8,"teleological","adj.","/tel-ee-uh-LOJ-i-kuhl/","Relating to the explanation of phenomena by their purpose or end goal rather than cause.","The teleological view of evolution, once common, has largely been abandoned by biologists.","purpose-driven,goal-oriented","mechanistic","amaca dayalı açıklayan"],
+[8,"theoretical","adj.","/thee-uh-RET-i-kuhl/","Concerned with theory rather than practical application.","The proposal remains purely theoretical until it can be tested in a real classroom.","hypothetical,abstract,speculative","practical,applied,empirical","kuramsal, teorik"],
+[8,"transcend","v.","/tran-SEND/","To rise above or go beyond the limits of something.","Great literature transcends the specific era in which it was written.","surpass,exceed,rise above","fall short,remain within","aşmak, sınırlarını aşmak"],
+[8,"utopian","adj.","/yoo-TOH-pee-uhn/","Relating to or based on an idealized, impossibly perfect society.","Critics dismissed the plan as utopian, ignoring the practical constraints of city budgets.","idealistic,visionary,impractical","dystopian,realistic,pragmatic","ütopik"],
+[8,"veracity","n.","/vuh-RAS-i-tee/","Conformity to facts; accuracy or truthfulness.","Editors questioned the veracity of several key quotes in the article.","truthfulness,accuracy,honesty","dishonesty,falsehood,inaccuracy","doğruluk, gerçeklik"],
+[8,"zeitgeist","n.","/TSAHYT-gahyst/","The defining spirit or mood of a particular period of history.","The film captured the anxious zeitgeist of the early pandemic months.","spirit of the age,mood","(no direct antonym)","çağın/dönemin ruhu"],
+[8,"construct","n.","/KON-struhkt/","An idea or theory containing various conceptual elements, typically one considered subjective.","Some sociologists argue that race is fundamentally a social construct.","concept,notion,framework","(no direct antonym)","zihinsel kurgu, kavramsal yapı"],
+[9,"abundant","adj.","/uh-BUHN-duhnt/","Existing or available in large quantities; plentiful.","Rainfall was abundant that year, producing the region's best harvest in a decade.","plentiful,copious,ample","scarce,sparse,insufficient","bol, bereketli"],
+[9,"ample","adj.","/AM-puhl/","Enough or more than enough; plentiful.","Candidates were given ample time to review the case study before the interview.","sufficient,abundant,plentiful","insufficient,inadequate,scant","yeterli, bol"],
+[9,"copious","adj.","/KOH-pee-uhs/","Abundant in supply or quantity.","She took copious notes throughout the three-hour lecture.","abundant,plentiful,profuse","scant,meager,sparse","bol miktarda"],
+[9,"cumbersome","adj.","/KUHM-ber-suhm/","Large or heavy and therefore difficult to carry or use; slow and inefficient.","The cumbersome approval process discouraged many small businesses from applying.","unwieldy,burdensome,awkward","manageable,efficient,streamlined","hantal, külfetli"],
+[9,"cumulative","adj.","/KYOOM-yuh-luh-tiv/","Increasing or growing by successive additions.","The cumulative effect of small daily habits can be greater than any single dramatic change.","accumulated,aggregate,mounting","isolated,singular,one-time","birikimli, kümülatif"],
+[9,"diminutive","adj.","/dih-MIN-yuh-tiv/","Extremely or unusually small.","The diminutive island nation has an outsized influence on global shipping law.","tiny,small,minuscule","enormous,huge,massive","çok küçük"],
+[9,"disproportionate","adj.","/dis-pruh-PAWR-shuh-nit/","Too large or too small in comparison with something else.","The report found that fines were disproportionate to the severity of the offenses.","unequal,excessive,uneven","proportionate,balanced,equal","orantısız"],
+[9,"exorbitant","adj.","/ig-ZAWR-bi-tuhnt/","Unreasonably high, especially in price.","Tourists were shocked by the exorbitant prices near the famous landmark.","excessive,extortionate,outrageous","reasonable,moderate,fair","fahiş, aşırı yüksek"],
+[9,"exhaustive","adj.","/ig-ZAW-stiv/","Thorough and complete; covering all elements.","The report offers an exhaustive review of the past twenty years of climate data.","thorough,comprehensive,complete","cursory,superficial,partial","eksiksiz, çok kapsamlı"],
+[9,"formidable","adj.","/FAWR-mi-duh-buhl/","Inspiring fear or respect through being impressively large, powerful, or capable.","The defending champion remains a formidable opponent despite her recent injury.","impressive,daunting,powerful","weak,unimpressive,manageable","ürkütücü derecede güçlü"],
+[9,"inordinate","adj.","/in-AWR-dn-it/","Unreasonably large in amount or degree; excessive.","The project consumed an inordinate amount of time given its limited scope.","excessive,disproportionate,undue","modest,reasonable,proportionate","aşırı, ölçüsüz"],
+[9,"innumerable","adj.","/ih-NOO-mer-uh-buhl/","Too many to be counted; extremely numerous.","Innumerable small businesses closed permanently during the crisis.","countless,numerous,myriad","few,countable,limited","sayısız"],
+[9,"marginal","adj.","/MAHR-juh-nl/","So small or slight as to be barely significant; relating to the edge or a minimum standard.","The new drug showed only a marginal improvement over the existing treatment.","minor,slight,negligible","substantial,significant,major","çok az, önemsiz derecede küçük"],
+[9,"meager","adj.","/MEE-ger/","Lacking in quantity or quality; small in amount.","On his meager salary, saving for retirement seemed almost impossible.","scanty,sparse,insufficient","abundant,plentiful,ample","yetersiz, kıt"],
+[9,"minuscule","adj.","/MIN-uh-skyool/","Extremely small.","The satellite's camera can detect changes as minuscule as a few millimeters.","tiny,minute,negligible","huge,massive,enormous","çok küçük"],
+[9,"negligible","adj.","/NEG-li-juh-buhl/","So small or unimportant as to be not worth considering.","The study found the drug's side effects to be negligible in most patients.","insignificant,minor,trivial","significant,substantial,considerable","ihmal edilebilir derecede küçük"],
+[9,"paltry","adj.","/PAWL-tree/","Small or meager in amount; contemptibly insignificant.","Workers protested the paltry raise, which failed to keep pace with inflation.","meager,trifling,insignificant","substantial,generous,considerable","cüzi, önemsiz"],
+[9,"peripheral","adj.","/puh-RIF-er-uhl/","Of secondary or minor importance; relating to the outer edge.","The budget cuts targeted only peripheral programs, leaving core services untouched.","secondary,minor,marginal","central,core,essential","ikincil önemde, çevresel"],
+[9,"plethora","n.","/PLETH-er-uh/","An excessive amount or number of something.","The new streaming platform offers a plethora of documentaries on ocean life.","abundance,excess,surplus","scarcity,dearth,shortage","aşırı bolluk"],
+[9,"profound","adj.","/pruh-FOWND/","Very great or intense; having deep insight or understanding.","The discovery had a profound effect on how scientists understood the origins of the disease.","deep,intense,far-reaching","superficial,shallow,slight","derin, köklü"],
+[9,"proportional","adj.","/pruh-PAWR-shuh-nl/","Corresponding in size or degree to something else.","Under the new system, seats in parliament are proportional to each region's population.","proportionate,commensurate,balanced","disproportionate,unequal","orantılı"],
+[9,"rampant","adj.","/RAM-puhnt/","Flourishing or spreading unchecked, especially of something undesirable.","Corruption was rampant throughout the agency long before the scandal broke.","widespread,unchecked,uncontrolled","controlled,contained,rare","kontrolden çıkmış, yaygın"],
+[9,"rudimentary","adj.","/roo-duh-MEN-tuh-ree/","Basic or fundamental; not fully developed.","The lab's rudimentary equipment made precise measurement almost impossible.","basic,elementary,primitive","advanced,sophisticated,developed","ilkel, temel düzeyde"],
+[9,"scant","adj.","/skant/","Barely sufficient; small in quantity.","Given the scant evidence, the jury could not reach a conviction.","meager,insufficient,sparse","abundant,ample,plentiful","kıt, yetersiz"],
+[9,"sparse","adj.","/spahrs/","Thinly dispersed or scattered; not dense.","Vegetation grows sparse and stunted near the summit.","scant,scattered,thin","dense,abundant,thick","seyrek"],
+[9,"staggering","adj.","/STAG-er-ing/","So shocking as to be almost unbelievable; astonishing in scale.","The staggering cost overrun forced the city to halt construction entirely.","astonishing,overwhelming,shocking","unremarkable,minor,trivial","şaşırtıcı derecede büyük"],
+[9,"substantial","adj.","/suhb-STAN-shuhl/","Of considerable importance, size, or worth.","The company reported a substantial increase in revenue this quarter.","considerable,sizable,significant","negligible,minor,insignificant","hatırı sayılır, önemli ölçüde"],
+[9,"superfluous","adj.","/soo-PUR-floo-uhs/","Unnecessary, especially through being more than what is needed.","The editor cut every superfluous adjective from the final draft.","unnecessary,excessive,redundant","essential,necessary,required","gereksiz, fazladan"],
+[9,"voluminous","adj.","/vuh-LOO-muh-nuhs/","Having great volume or bulk; large in size or quantity, especially of writing.","The lawyer submitted a voluminous set of documents supporting the appeal.","extensive,copious,bulky","compact,brief,limited","hacimli, çok kabarık"],
+[9,"extensive","adj.","/ik-STEN-siv/","Covering a large area; large in amount or scope.","The company conducted extensive testing before releasing the new vaccine.","widespread,broad,comprehensive","limited,narrow,restricted","geniş kapsamlı"],
+[9,"acute","adj.","/uh-KYOOT/","Present or experienced to a severe or intense degree; sharp in perception.","The hospital reported an acute shortage of nursing staff during the outbreak.","severe,intense,sharp","mild,slight,chronic","şiddetli, keskin"],
+[9,"drastic","adj.","/DRAS-tik/","Likely to have a strong or far-reaching effect; radical and extreme.","The airline took drastic measures to cut costs during the downturn.","extreme,severe,radical","mild,minor,moderate","sert, köklü (önlem)"],
+[9,"unparalleled","adj.","/uhn-PAR-uh-leld/","Without equal; unmatched.","The exhibit offers unparalleled access to artifacts never before shown outside the country.","unmatched,unprecedented,peerless","common,ordinary,typical","eşi benzeri olmayan"],
+[9,"immense","adj.","/ih-MENS/","Extremely large or great, especially in scale or degree.","The renovation required an immense amount of coordination between three separate agencies.","vast,enormous,huge","tiny,minute,insignificant","muazzam, çok büyük"],
+[9,"incessant","adj.","/in-SES-uhnt/","Continuing without pause or interruption.","The incessant rain finally forced organizers to cancel the outdoor festival.","constant,continuous,unrelenting","intermittent,occasional,sporadic","aralıksız, sürekli"],
+[9,"intermittent","adj.","/in-ter-MIT-nt/","Occurring at irregular intervals; not continuous.","Intermittent power outages disrupted the factory's production schedule for weeks.","sporadic,periodic,irregular","continuous,constant,uninterrupted","aralıklı"],
+[9,"marked","adj.","/mahrkt/","Clearly noticeable; distinct.","There was a marked improvement in air quality after the new regulations took effect.","noticeable,pronounced,distinct","imperceptible,slight,negligible","belirgin, göze çarpan"],
+[9,"modest","adj.","/MOD-ist/","Relatively moderate, limited, or small in amount; not showy.","The company reported modest gains despite the difficult economic climate.","moderate,limited,unpretentious","substantial,considerable,extravagant","mütevazı, sınırlı ölçüde"],
+[9,"nominal","adj.","/NOM-uh-nl/","Existing in name only; a token amount, far below the real value.","The museum charges a nominal entry fee of just one dollar.","token,minimal,symbolic","substantial,significant,real","sembolik, göstermelik"],
+[9,"notable","adj.","/NOH-tuh-buhl/","Worthy of attention or notice; remarkable.","Among the applicants was one notable exception with no formal training at all.","remarkable,significant,noteworthy","unremarkable,insignificant,ordinary","dikkate değer"],
+[9,"optimal","adj.","/OP-tuh-muhl/","Best or most favorable under given circumstances.","Researchers identified the optimal dosage through a series of controlled trials.","ideal,best,most favorable","worst,least favorable,suboptimal","en uygun, ideal"],
+[9,"pervasive","adj.","/per-VEY-siv/","Spreading widely throughout an area or group of people.","A pervasive sense of uncertainty settled over the markets after the announcement.","widespread,prevalent,ubiquitous","rare,limited,localized","her yere sinmiş, yaygın"],
+[9,"pronounced","adj.","/pruh-NOWNST/","Very noticeable or marked.","There was a pronounced difference in scores between the two testing groups.","marked,noticeable,distinct","subtle,slight,faint","belirgin"],
+[9,"rigorous","adj.","/RIG-er-uhs/","Extremely thorough, exhaustive, or accurate; strict.","The drug underwent rigorous testing before regulators approved it for public use.","thorough,stringent,meticulous","lax,careless,superficial","titiz, sıkı"],
+[9,"robust","adj.","/roh-BUHST/","Strong and healthy; sturdy in construction; able to withstand difficult conditions.","The bridge's robust design allowed it to survive the earthquake with minimal damage.","sturdy,strong,resilient","fragile,weak,flimsy","sağlam, dayanıklı"],
+[9,"stark","adj.","/stahrk/","Severe or bare in appearance; in complete contrast.","The stark difference between the two neighborhoods reflected decades of unequal investment.","harsh,severe,extreme","subtle,mild,gentle","keskin, çıplak (gerçek/fark)"],
+[9,"striking","adj.","/STRAHY-king/","Attracting attention because of unusual or distinctive qualities.","The most striking feature of the report is how quickly opinions shifted.","remarkable,noticeable,conspicuous","unremarkable,ordinary,unnoticeable","çarpıcı"],
+[9,"thorough","adj.","/THUR-oh/","Complete with regard to every detail; careful and exhaustive.","A thorough review of the contract revealed several hidden fees.","comprehensive,meticulous,exhaustive","cursory,superficial,careless","eksiksiz, titiz"],
+[9,"token","adj.","/TOH-kuhn/","Done or given as a symbol or indication, especially something small or minimal.","Critics dismissed the reforms as a token gesture that changed little in practice.","symbolic,nominal,perfunctory","substantial,genuine,meaningful","simgesel, göstermelik"],
+[9,"vast","adj.","/vast/","Of very great extent or quantity; immense.","The expedition mapped a vast stretch of previously unexplored coastline.","immense,extensive,enormous","tiny,small,limited","engin, uçsuz bucaksız"],
+[10,"acquiesce","v.","/ak-wee-ES/","To accept something reluctantly but without protest.","After hours of debate, the board finally acquiesced to the shareholders' demands.","comply,yield,submit","resist,refuse,object","isteksizce kabul etmek, boyun eğmek"],
+[10,"adhere","v.","/ad-HEER/","To stick firmly to a surface or substance; to follow a rule or belief closely.","All contractors must adhere strictly to the updated safety code.","comply,conform,follow","deviate,violate,disregard","sıkı sıkıya uymak, yapışmak"],
+[10,"advocate","v.","/AD-vuh-keyt/","To publicly recommend or support a particular cause or policy.","The organization advocates for stronger protections for gig economy workers.","champion,promote,support","oppose,discourage,denounce","savunmak, taraftarlığını yapmak"],
+[10,"affiliate","v.","/uh-FIL-ee-eyt/","To officially attach or connect as a member or branch.","The local clinic affiliated with a larger hospital network last year.","associate,join,ally","disaffiliate,separate,disassociate","bağlantı kurmak, üye olmak"],
+[10,"allocate","v.","/AL-uh-keyt/","To distribute resources or duties for a particular purpose.","The city allocated additional funds to repair aging bridges.","assign,distribute,apportion","withhold,retain","tahsis etmek, pay ayırmak"],
+[10,"alleviate","v.","/uh-LEE-vee-eyt/","To make suffering or a problem less severe.","The new medication significantly alleviates chronic pain for many patients.","ease,relieve,mitigate","aggravate,worsen,intensify","hafifletmek"],
+[10,"appease","v.","/uh-PEEZ/","To pacify someone by acceding to their demands, often at a cost.","The government's concessions were widely seen as an attempt to appease striking workers.","placate,pacify,mollify","provoke,antagonize,anger","yatıştırmak, teskin etmek"],
+[10,"arduous","adj.","/AHR-joo-uhs/","Involving or requiring strenuous effort; difficult and tiring.","The arduous journey across the mountains took nearly three weeks.","strenuous,grueling,taxing","easy,effortless,undemanding","zahmetli, çok yorucu"],
+[10,"assimilate","v.","/uh-SIM-uh-leyt/","To absorb and integrate people, ideas, or knowledge into a wider group.","Immigrant communities often assimilate over generations while retaining aspects of their heritage.","absorb,integrate,incorporate","segregate,isolate,exclude","özümsemek, uyum sağlamak"],
+[10,"avert","v.","/uh-VURT/","To prevent or ward off an undesirable occurrence.","Quick action by the crew helped avert what could have been a serious accident.","prevent,forestall,avoid","cause,provoke,invite","önlemek, savuşturmak"],
+[10,"coincide","v.","/koh-in-SAHYD/","To occur at the same time; to be in agreement.","Her graduation happened to coincide with the company's annual hiring event.","align,correspond,overlap","conflict,clash,differ","aynı zamana denk gelmek"],
+[10,"commence","v.","/kuh-MENS/","To begin; to start.","Construction on the new terminal will commence early next spring.","begin,start,initiate","conclude,end,finish","başlamak"],
+[10,"comply","v.","/kuhm-PLAHY/","To act in accordance with a wish, command, or rule.","All vendors must comply with the updated food safety regulations by June.","conform,obey,adhere","defy,violate,disobey","kurallara uymak"],
+[10,"comprehensive","adj.","/kom-pri-HEN-siv/","Complete and including everything that is necessary; thorough.","The comprehensive review covered every department, not just the ones under scrutiny.","thorough,extensive,exhaustive","incomplete,partial,limited","kapsamlı"],
+[10,"conducive","adj.","/kuhn-DOO-siv/","Making a certain situation or outcome likely or possible.","A quiet, organized workspace is conducive to deep focus.","favorable,helpful,beneficial","detrimental,unfavorable,hindering","elverişli, katkı sağlayan"],
+[10,"confer","v.","/kuhn-FUR/","To grant a title, degree, or benefit; to discuss something to reach a decision.","The university will confer honorary degrees on three distinguished alumni this year.","grant,bestow,award","withhold,revoke,deny","bahşetmek, vermek (unvan/hak)"],
+[10,"consolidate","v.","/kuhn-SOL-i-deyt/","To combine a number of things into a single, more effective whole.","The bank consolidated its regional branches into a handful of larger offices.","merge,combine,unify","divide,disperse,fragment","pekiştirmek, birleştirmek"],
+[10,"constrain","v.","/kuhn-STREYN/","To severely restrict the scope, extent, or freedom of something.","Limited funding constrained the scope of the research team's investigation.","restrict,limit,confine","free,liberate,unleash","kısıtlamak, sınırlamak"],
+[10,"contemplate","v.","/KON-tem-pleyt/","To think about something deeply and at length.","She spent the weekend contemplating whether to accept the job offer abroad.","consider,ponder,deliberate","dismiss,disregard","üzerinde derin derin düşünmek"],
+[10,"contravene","v.","/kon-truh-VEEN/","To act in a way that violates a law, rule, or agreement.","The company was fined for contravening environmental regulations at three separate sites.","violate,breach,infringe","comply with,uphold,observe","kurala aykırı davranmak, ihlal etmek"],
+[10,"convene","v.","/kuhn-VEEN/","To come together for a meeting or activity; to summon to assemble.","The committee will convene next Tuesday to finalize the budget proposal.","assemble,gather,meet","disperse,disband,adjourn","toplantıya çağırmak, bir araya gelmek"],
+[10,"correlate","v.","/KAWR-uh-leyt/","To have a mutual relationship or connection, in which one thing affects or depends on another.","Researchers found that sleep quality correlates strongly with academic performance.","relate,connect,link","disconnect,dissociate","birbiriyle ilişkili olmak"],
+[10,"deplore","v.","/dih-PLAWR/","To feel or express strong disapproval of something.","World leaders deplored the attack in a joint statement issued within hours.","condemn,denounce,decry","praise,commend,endorse","şiddetle kınamak"],
+[10,"derive","v.","/dih-RAHYV/","To obtain something from a specified source; to trace the origin of.","Much of the region's income is derived from tourism and agriculture.","obtain,extract,originate","(no direct antonym)","türetmek, elde etmek"],
+[10,"designate","v.","/DEZ-ig-neyt/","To officially assign a name, description, or role to someone or something.","The historic building was designated a national landmark in 1995.","assign,appoint,name","(no direct antonym)","atamak, resmen belirlemek"],
+[10,"deter","v.","/dih-TUR/","To discourage someone from doing something through fear of consequences.","Higher fines were introduced to deter illegal dumping in protected wetlands.","discourage,dissuade,inhibit","encourage,incite,motivate","caydırmak"],
+[10,"devise","v.","/dih-VAHYZ/","To plan or invent something through careful thought.","Engineers devised a clever workaround for the sensor malfunction.","invent,formulate,design","(no direct antonym)","tasarlamak, geliştirmek"],
+[10,"differentiate","v.","/dif-uh-REN-shee-eyt/","To recognize or express what makes something different; to become different during development.","The exam requires students to differentiate between correlation and causation.","distinguish,discriminate,separate","conflate,equate,confuse","ayırt etmek, farklılaştırmak"],
+[10,"diminish","v.","/dih-MIN-ish/","To make or become less; to reduce in importance or size.","The scandal did little to diminish the senator's popularity among core supporters.","reduce,lessen,decrease","increase,amplify,enlarge","azaltmak"],
+[10,"disseminate","v.","/dih-SEM-uh-neyt/","To spread information or ideas widely.","The agency used social media to disseminate emergency alerts quickly.","spread,distribute,circulate","withhold,suppress,contain","yaymak, dağıtmak (bilgi)"],
+[10,"distort","v.","/dih-STAWRT/","To pull or twist out of shape; to give a misleading account of something.","Critics accused the documentary of distorting the facts to fit a predetermined narrative.","misrepresent,twist,skew","clarify,represent accurately","çarpıtmak"],
+[10,"eclipse","v.","/ih-KLIPS/","To surpass in importance, fame, or reputation; to block from view.","The startup's rapid rise quickly eclipsed its more established competitors.","surpass,overshadow,outshine","(no direct antonym)","gölgede bırakmak"],
+[10,"elicit","v.","/ih-LIS-it/","To draw out a response or reaction from someone.","The survey question was designed to elicit honest feedback about workplace culture.","evoke,draw out,provoke","suppress,stifle,conceal","ortaya çıkarmak, çekmek (tepki/bilgi)"],
+[10,"emulate","v.","/EM-yuh-leyt/","To match or surpass a person or achievement, typically by imitation.","The young chef openly tried to emulate the techniques of her mentor.","imitate,mimic,copy","originate,diverge from","örnek alarak geçmeye çalışmak"],
+[10,"endorse","v.","/en-DAWRS/","To declare one's public approval or support of something.","The professional association formally endorsed the new safety guidelines.","support,approve,back","oppose,reject,denounce","açıkça onaylamak, desteklemek"],
+[10,"envisage","v.","/en-VIZ-ij/","To imagine as a future possibility; to visualize.","The architects envisage a fully pedestrian city center within a decade.","envision,imagine,anticipate","(no direct antonym)","gözünde canlandırmak, öngörmek"],
+[10,"exempt","adj.","/ig-ZEMPT/","Free from an obligation or liability imposed on others.","Nonprofit organizations are generally exempt from paying certain federal taxes.","excused,free,immune","liable,subject,obligated","muaf tutulmuş"],
+[10,"exert","v.","/ig-ZURT/","To apply or bring to bear a force, influence, or quality.","Peer pressure can exert a powerful influence on teenage decision-making.","apply,wield,exercise","withhold,restrain","uygulamak, sarf etmek (güç/etki)"],
+[10,"facilitate","v.","/fuh-SIL-i-teyt/","To make an action or process easier.","The new software facilitates collaboration between remote team members.","ease,simplify,enable","hinder,obstruct,impede","kolaylaştırmak"],
+[10,"forfeit","v.","/FAWR-fit/","To lose or be deprived of a right, privilege, or possession as a penalty.","The team forfeited the match after fielding an ineligible player.","surrender,relinquish,lose","retain,keep,claim","hak kaybederek yitirmek"],
+[10,"foster","v.","/FAW-ster/","To encourage the development of something; to promote growth.","Open-plan offices are often designed to foster spontaneous collaboration.","promote,nurture,encourage","discourage,suppress,hinder","geliştirilmesine yardımcı olmak, beslemek"],
+[10,"hinder","v.","/HIN-der/","To create difficulty for someone or something, resulting in delay or obstruction.","Heavy fog hindered the search-and-rescue operation for most of the morning.","obstruct,impede,hamper","facilitate,help,assist","engellemek"],
+[10,"impede","v.","/im-PEED/","To delay or prevent someone or something by obstructing them.","Bureaucratic delays continued to impede the delivery of emergency aid.","hinder,obstruct,block","facilitate,expedite,advance","engellemek, geciktirmek"],
+[10,"impose","v.","/im-POHZ/","To force something unwelcome or unfamiliar to be accepted by another.","The council voted to impose a temporary curfew during the state of emergency.","enforce,levy,inflict","remove,lift,waive","dayatmak, zorla uygulatmak"],
+[10,"incorporate","v.","/in-KAWR-puh-reyt/","To include something as part of a whole; to form a legal corporation.","The final design incorporates feedback from over a thousand user surveys.","include,integrate,embody","exclude,omit,separate","dahil etmek, katmak"],
+[10,"induce","v.","/in-DOOS/","To succeed in persuading someone to do something; to bring about a condition.","Doctors sometimes induce labor when a pregnancy extends well past its due date.","cause,provoke,prompt","prevent,deter,discourage","ikna ederek yaptırmak, sebep olmak"],
+[10,"instigate","v.","/IN-sti-geyt/","To bring about an occurrence, especially an unwelcome one, by initiating action.","Investigators believe a single rumor instigated the entire panic.","initiate,provoke,incite","quell,suppress,discourage","kışkırtmak, tetiklemek"],
+[10,"integrate","v.","/IN-ti-greyt/","To combine or bring together parts into a whole; to incorporate a group into a wider community.","The school district worked for years to fully integrate students of all backgrounds.","combine,merge,incorporate","segregate,separate,isolate","bütünleştirmek, kaynaştırmak"],
+[10,"intervene","v.","/in-ter-VEEN/","To come between so as to prevent or alter a result; to take action to improve a situation.","Central banks intervened to stabilize the currency after its sudden drop.","interfere,mediate,step in","ignore,abstain,withdraw","müdahale etmek, araya girmek"],
+[10,"invoke","v.","/in-VOHK/","To cite or appeal to as an authority for an action or in support of an argument.","The mayor invoked emergency powers to fast-track the flood relief effort.","cite,appeal to,summon","disregard,ignore,waive","başvurmak, öne sürmek (yetki/kural)"],
+];
+
+const SECTION_TITLES = {
+  1: "Analysis, Logic & Argumentation",
+  2: "Rhetoric, Tone & Communication",
+  3: "Character & Personality",
+  4: "Emotion & Disposition",
+  5: "Change, Process & Development",
+  6: "Society, Politics & Economy",
+  7: "Science & the Natural World",
+  8: "Abstract & Philosophical Concepts",
+  9: "Quantity, Degree & Intensity",
+  10: "Core Academic Verbs & Relations"
+};
+
+const VOCAB = VOCAB_RAW.map((r, i) => ({
+  id: i + 1,
+  section: r[0],
+  word: r[1],
+  pos: r[2],
+  phonetic: r[3],
+  definition: r[4],
+  example: r[5],
+  synonyms: r[6].split(",").map(s => s.trim()).filter(Boolean),
+  antonyms: r[7].split(",").map(s => s.trim()).filter(Boolean),
+  turkish: r[8]
+}));
+
+const STORAGE_KEY = "lexicon500_mastered_v1";
+let mastered = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"));
+
+let state = {
+  section: 1,
+  mode: "study",
+  search: "",
+  flashOrder: [],
+  flashIndex: 0,
+  flashFlipped: false,
+  quiz: { questions: [], index: 0, score: 0, answered: false, finished: false, picked: null }
+};
+
+function saveMastered() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(mastered)));
+}
+
+function toggleMastered(id) {
+  if (mastered.has(id)) mastered.delete(id); else mastered.add(id);
+  saveMastered();
+  renderProgress();
+  if (state.mode === "study") renderStudyView();
+  if (state.mode === "flash") renderFlashView();
+}
+
+function getSectionWords(section) {
+  return VOCAB.filter(w => w.section === section);
+}
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function renderTabs() {
+  const container = document.getElementById("tab-container");
+  container.innerHTML = "";
+  for (let i = 1; i <= 10; i++) {
+    const words = getSectionWords(i);
+    const done = words.filter(w => mastered.has(w.id)).length;
+    const btn = document.createElement("button");
+    btn.className = "tab-btn px-3.5 py-1.5 rounded-full text-sm font-medium border " +
+      (i === state.section
+        ? "bg-slate-900 text-white border-slate-900"
+        : "bg-white text-slate-600 border-slate-200 hover:border-slate-400");
+    btn.innerHTML = "Section " + i + "<span class='ml-1.5 text-[11px] opacity-70'>" + done + "/50</span>";
+    btn.addEventListener("click", () => switchSection(i));
+    container.appendChild(btn);
+  }
+}
+
+function renderProgress() {
+  const totalDone = mastered.size;
+  document.getElementById("global-progress-label").textContent = totalDone + " / " + VOCAB.length;
+  document.getElementById("global-progress-bar").style.width = (totalDone / VOCAB.length * 100).toFixed(1) + "%";
+
+  const words = getSectionWords(state.section);
+  const done = words.filter(w => mastered.has(w.id)).length;
+  document.getElementById("section-progress-label").textContent = done + " of 50 words mastered in this section";
+  document.getElementById("section-progress-bar").style.width = (done / 50 * 100).toFixed(1) + "%";
+  document.getElementById("section-title").textContent = "Section " + state.section + ": " + SECTION_TITLES[state.section];
+  renderTabs();
+}
+
+function switchSection(n) {
+  state.section = n;
+  state.search = "";
+  document.getElementById("search-input").value = "";
+  state.flashOrder = shuffle(getSectionWords(n).map(w => w.id));
+  state.flashIndex = 0;
+  state.flashFlipped = false;
+  state.quiz = { questions: [], index: 0, score: 0, answered: false, finished: false, picked: null };
+  renderProgress();
+  renderActiveView();
+}
+
+function switchMode(m) {
+  state.mode = m;
+  document.querySelectorAll(".mode-btn").forEach(b => {
+    const active = b.dataset.mode === m;
+    b.className = "mode-btn px-4 py-2 text-sm font-semibold rounded-lg transition " +
+      (active ? "bg-white text-slate-900 shadow" : "text-slate-500 hover:text-slate-800");
+  });
+  document.getElementById("study-view").classList.toggle("hidden", m !== "study");
+  document.getElementById("flash-view").classList.toggle("hidden", m !== "flash");
+  document.getElementById("quiz-view").classList.toggle("hidden", m !== "quiz");
+  renderActiveView();
+}
+
+function renderActiveView() {
+  if (state.mode === "study") renderStudyView();
+  else if (state.mode === "flash") renderFlashView();
+  else renderQuizView();
+}
+
+/* ---------- STUDY TABLE VIEW ---------- */
+function renderStudyView() {
+  const el = document.getElementById("study-view");
+  let words = getSectionWords(state.section);
+  if (state.search.trim()) {
+    const q = state.search.trim().toLowerCase();
+    words = words.filter(w => w.word.toLowerCase().includes(q) || w.definition.toLowerCase().includes(q));
+  }
+  if (!words.length) {
+    el.innerHTML = "<p class='text-slate-400 text-sm py-12 text-center'>No words match your search.</p>";
+    return;
+  }
+  el.innerHTML = "<div class='grid grid-cols-1 md:grid-cols-2 gap-4 fade-in'>" +
+    words.map(w => {
+      const isMastered = mastered.has(w.id);
+      return "<article class='bg-white rounded-2xl border " + (isMastered ? "border-teal-200 ring-1 ring-teal-100" : "border-slate-200") + " p-5 shadow-sm hover:shadow-md transition'>" +
+        "<div class='flex items-start justify-between gap-3'>" +
+          "<div>" +
+            "<div class='flex items-baseline gap-2 flex-wrap'>" +
+              "<h3 class='font-serif-display text-lg font-semibold text-slate-900'>" + w.word + "</h3>" +
+              "<span class='text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full'>" + w.pos + "</span>" +
+            "</div>" +
+            "<p class='text-xs text-slate-400 font-mono mt-0.5'>" + w.phonetic + "</p>" +
+            "<p class='text-sm text-amber-700 font-medium mt-1'>" + w.turkish + "</p>" +
+          "</div>" +
+          "<label class='flex items-center gap-1.5 text-xs text-slate-500 shrink-0 cursor-pointer select-none'>" +
+            "<input type='checkbox' class='mastery-check w-4 h-4' " + (isMastered ? "checked" : "") + " data-id='" + w.id + "'>" +
+            "Mastered" +
+          "</label>" +
+        "</div>" +
+        "<p class='text-[10px] uppercase tracking-wide text-teal-700 bg-teal-50 inline-block px-2 py-0.5 rounded mt-3'>IELTS Academic &bull; SAT Reading &amp; Writing</p>" +
+        "<p class='text-sm text-slate-700 mt-2 leading-relaxed'>" + w.definition + "</p>" +
+        "<p class='text-sm text-slate-500 italic mt-2 leading-relaxed border-l-2 border-slate-200 pl-3'>&ldquo;" + w.example + "&rdquo;</p>" +
+        "<div class='flex flex-wrap gap-x-6 gap-y-1 mt-3 text-xs'>" +
+          "<div><span class='font-semibold text-emerald-700'>Synonyms: </span><span class='text-slate-600'>" + w.synonyms.join(", ") + "</span></div>" +
+          "<div><span class='font-semibold text-rose-700'>Antonyms: </span><span class='text-slate-600'>" + w.antonyms.join(", ") + "</span></div>" +
+        "</div>" +
+      "</article>";
+    }).join("") +
+  "</div>";
+
+  el.querySelectorAll(".mastery-check").forEach(cb => {
+    cb.addEventListener("change", () => toggleMastered(Number(cb.dataset.id)));
+  });
+}
+
+/* ---------- FLASHCARD VIEW ---------- */
+function renderFlashView() {
+  const el = document.getElementById("flash-view");
+  if (!state.flashOrder.length) state.flashOrder = shuffle(getSectionWords(state.section).map(w => w.id));
+  const id = state.flashOrder[state.flashIndex];
+  const w = VOCAB.find(v => v.id === id);
+  const isMastered = mastered.has(w.id);
+
+  el.innerHTML =
+    "<div class='max-w-xl mx-auto fade-in'>" +
+      "<p class='text-center text-sm text-slate-500 mb-3'>Card " + (state.flashIndex + 1) + " of " + state.flashOrder.length + "</p>" +
+      "<div class='flip-scene h-72 sm:h-80 cursor-pointer' id='flash-scene'>" +
+        "<div class='flip-card " + (state.flashFlipped ? "flipped" : "") + "' id='flash-card'>" +
+          "<div class='flip-face bg-gradient-to-br from-slate-900 to-teal-900 text-white flex flex-col items-center justify-center p-8 shadow-lg'>" +
+            "<p class='text-xs uppercase tracking-widest text-teal-300 mb-3'>Section " + state.section + " &middot; Tap to reveal</p>" +
+            "<h3 class='font-serif-display text-3xl sm:text-4xl font-semibold text-center'>" + w.word + "</h3>" +
+            "<p class='text-slate-300 font-mono text-sm mt-2'>" + w.phonetic + " &middot; " + w.pos + "</p>" +
+          "</div>" +
+          "<div class='flip-face flip-back bg-white border-2 border-teal-100 flex flex-col justify-center p-6 sm:p-8 shadow-lg overflow-y-auto'>" +
+            "<p class='text-sm text-amber-700 font-semibold'>" + w.turkish + "</p>" +
+            "<p class='text-sm text-slate-700 leading-relaxed mt-2'><span class='font-semibold text-slate-900'>Definition: </span>" + w.definition + "</p>" +
+            "<p class='text-sm text-slate-500 italic mt-3 leading-relaxed'>&ldquo;" + w.example + "&rdquo;</p>" +
+            "<p class='text-xs mt-3'><span class='font-semibold text-emerald-700'>Syn: </span>" + w.synonyms.join(", ") + "</p>" +
+            "<p class='text-xs mt-1'><span class='font-semibold text-rose-700'>Ant: </span>" + w.antonyms.join(", ") + "</p>" +
+          "</div>" +
+        "</div>" +
+      "</div>" +
+      "<div class='flex items-center justify-between mt-5 gap-2'>" +
+        "<button id='flash-prev' class='px-4 py-2 rounded-full bg-white border border-slate-300 text-sm font-medium hover:bg-slate-50'>&larr; Prev</button>" +
+        "<button id='flash-master' class='px-4 py-2 rounded-full text-sm font-semibold " + (isMastered ? "bg-teal-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200") + "'>" + (isMastered ? "✓ Mastered" : "Mark as Mastered") + "</button>" +
+        "<button id='flash-next' class='px-4 py-2 rounded-full bg-slate-900 text-white text-sm font-medium hover:bg-slate-700'>Next &rarr;</button>" +
+      "</div>" +
+      "<div class='flex justify-center mt-3'>" +
+        "<button id='flash-shuffle' class='text-xs text-slate-400 hover:text-slate-600 underline underline-offset-2'>Shuffle deck</button>" +
+      "</div>" +
+    "</div>";
+
+  const flip = () => { state.flashFlipped = !state.flashFlipped; renderFlashView(); };
+  document.getElementById("flash-scene").addEventListener("click", flip);
+  document.getElementById("flash-prev").addEventListener("click", (e) => {
+    e.stopPropagation();
+    state.flashIndex = (state.flashIndex - 1 + state.flashOrder.length) % state.flashOrder.length;
+    state.flashFlipped = false;
+    renderFlashView();
+  });
+  document.getElementById("flash-next").addEventListener("click", (e) => {
+    e.stopPropagation();
+    state.flashIndex = (state.flashIndex + 1) % state.flashOrder.length;
+    state.flashFlipped = false;
+    renderFlashView();
+  });
+  document.getElementById("flash-master").addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleMastered(w.id);
+  });
+  document.getElementById("flash-shuffle").addEventListener("click", (e) => {
+    e.stopPropagation();
+    state.flashOrder = shuffle(getSectionWords(state.section).map(v => v.id));
+    state.flashIndex = 0;
+    state.flashFlipped = false;
+    renderFlashView();
+  });
+}
+
+/* ---------- QUIZ VIEW ---------- */
+function buildQuiz(section) {
+  const words = getSectionWords(section);
+  const pool = shuffle(words).slice(0, 10);
+  return pool.map(w => {
+    const reverse = Math.random() < 0.5;
+    const distractorPool = shuffle(words.filter(o => o.id !== w.id)).slice(0, 3);
+    let options;
+    let prompt;
+    if (!reverse) {
+      prompt = "Which is the best definition of \"" + w.word + "\"?";
+      options = shuffle([
+        { id: w.id, text: w.definition },
+        ...distractorPool.map(d => ({ id: d.id, text: d.definition }))
+      ]);
+    } else {
+      prompt = "Which word best fits this definition: “" + w.definition + "”";
+      options = shuffle([
+        { id: w.id, text: w.word },
+        ...distractorPool.map(d => ({ id: d.id, text: d.word }))
+      ]);
+    }
+    return { correctId: w.id, prompt, options, word: w };
+  });
+}
+
+function renderQuizView() {
+  const el = document.getElementById("quiz-view");
+  const q = state.quiz;
+
+  if (!q.questions.length && !q.finished) {
+    el.innerHTML =
+      "<div class='max-w-xl mx-auto text-center bg-white rounded-2xl border border-slate-200 p-10 fade-in'>" +
+        "<h3 class='font-serif-display text-2xl font-semibold text-slate-900 mb-2'>Self-Check Quiz</h3>" +
+        "<p class='text-sm text-slate-500 mb-6'>10 quick multiple-choice questions drawn from Section " + state.section + ": " + SECTION_TITLES[state.section] + ".</p>" +
+        "<button id='quiz-start' class='px-6 py-2.5 rounded-full bg-slate-900 text-white text-sm font-semibold hover:bg-slate-700'>Start Quiz</button>" +
+      "</div>";
+    document.getElementById("quiz-start").addEventListener("click", () => {
+      state.quiz.questions = buildQuiz(state.section);
+      state.quiz.index = 0;
+      state.quiz.score = 0;
+      state.quiz.answered = false;
+      state.quiz.picked = null;
+      state.quiz.finished = false;
+      renderQuizView();
+    });
+    return;
+  }
+
+  if (q.finished) {
+    const pct = Math.round((q.score / q.questions.length) * 100);
+    el.innerHTML =
+      "<div class='max-w-xl mx-auto text-center bg-white rounded-2xl border border-slate-200 p-10 fade-in'>" +
+        "<p class='text-xs uppercase tracking-widest text-teal-600 font-semibold mb-2'>Quiz Complete</p>" +
+        "<h3 class='font-serif-display text-4xl font-semibold text-slate-900 mb-1'>" + q.score + " / " + q.questions.length + "</h3>" +
+        "<p class='text-sm text-slate-500 mb-6'>" + pct + "% correct on Section " + state.section + "</p>" +
+        "<div class='flex items-center justify-center gap-3'>" +
+          "<button id='quiz-retake' class='px-5 py-2 rounded-full bg-slate-900 text-white text-sm font-semibold hover:bg-slate-700'>Retake Quiz</button>" +
+          "<button id='quiz-study' class='px-5 py-2 rounded-full bg-white border border-slate-300 text-sm font-medium hover:bg-slate-50'>Back to Study</button>" +
+        "</div>" +
+      "</div>";
+    document.getElementById("quiz-retake").addEventListener("click", () => {
+      state.quiz = { questions: [], index: 0, score: 0, answered: false, finished: false, picked: null };
+      renderQuizView();
+    });
+    document.getElementById("quiz-study").addEventListener("click", () => switchMode("study"));
+    return;
+  }
+
+  const current = q.questions[q.index];
+  el.innerHTML =
+    "<div class='max-w-xl mx-auto fade-in'>" +
+      "<div class='flex items-center justify-between text-xs text-slate-500 mb-2'>" +
+        "<span>Question " + (q.index + 1) + " of " + q.questions.length + "</span>" +
+        "<span>Score: " + q.score + "</span>" +
+      "</div>" +
+      "<div class='w-full h-1.5 bg-slate-200 rounded-full overflow-hidden mb-5'>" +
+        "<div class='h-full bg-indigo-500 progress-fill' style='width:" + (q.index / q.questions.length * 100) + "%'></div>" +
+      "</div>" +
+      "<div class='bg-white rounded-2xl border border-slate-200 p-6 shadow-sm'>" +
+        "<p class='font-serif-display text-lg font-medium text-slate-900 mb-5'>" + current.prompt + "</p>" +
+        "<div id='quiz-options' class='flex flex-col gap-2.5'>" +
+          current.options.map((opt, i) => {
+            let cls = "quiz-option text-left px-4 py-3 rounded-xl border text-sm ";
+            if (q.answered) {
+              if (opt.id === current.correctId) cls += "border-emerald-400 bg-emerald-50 text-emerald-800";
+              else if (opt.id === q.picked) cls += "border-rose-300 bg-rose-50 text-rose-700";
+              else cls += "border-slate-200 text-slate-400";
+            } else {
+              cls += "border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 cursor-pointer";
+            }
+            return "<button class='" + cls + "' data-opt-id='" + opt.id + "' " + (q.answered ? "disabled" : "") + ">" + opt.text + "</button>";
+          }).join("") +
+        "</div>" +
+        "<div id='quiz-feedback' class='mt-4 text-sm'></div>" +
+        "<div class='mt-5 flex justify-end'>" +
+          "<button id='quiz-next' class='px-5 py-2 rounded-full bg-slate-900 text-white text-sm font-semibold hover:bg-slate-700 " + (q.answered ? "" : "hidden") + "'>" +
+            (q.index + 1 === q.questions.length ? "See Results" : "Next Question") + "</button>" +
+        "</div>" +
+      "</div>" +
+    "</div>";
+
+  if (!q.answered) {
+    document.querySelectorAll("[data-opt-id]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const pickedId = Number(btn.dataset.optId);
+        state.quiz.picked = pickedId;
+        state.quiz.answered = true;
+        if (pickedId === current.correctId) state.quiz.score++;
+        renderQuizView();
+      });
+    });
+  } else {
+    const fb = document.getElementById("quiz-feedback");
+    const correct = q.picked === current.correctId;
+    fb.innerHTML = correct
+      ? "<p class='text-emerald-700 font-medium'>Correct! &mdash; " + current.word.word + ": " + current.word.definition + "</p>"
+      : "<p class='text-rose-700 font-medium'>Not quite &mdash; " + current.word.word + " means: " + current.word.definition + "</p>";
+    document.getElementById("quiz-next").addEventListener("click", () => {
+      if (state.quiz.index + 1 >= state.quiz.questions.length) {
+        state.quiz.finished = true;
+      } else {
+        state.quiz.index++;
+        state.quiz.answered = false;
+        state.quiz.picked = null;
+      }
+      renderQuizView();
+    });
+  }
+}
+
+/* ---------- INIT & GLOBAL LISTENERS ---------- */
+document.querySelectorAll(".mode-btn").forEach(b => b.addEventListener("click", () => switchMode(b.dataset.mode)));
+
+document.getElementById("search-input").addEventListener("input", (e) => {
+  state.search = e.target.value;
+  if (state.mode === "study") renderStudyView();
+});
+
+document.getElementById("reset-progress-btn").addEventListener("click", () => {
+  if (confirm("Reset all mastery progress across all 500 words? This cannot be undone.")) {
+    mastered = new Set();
+    saveMastered();
+    renderProgress();
+    renderActiveView();
+  }
+});
+
+state.flashOrder = shuffle(getSectionWords(1).map(w => w.id));
+switchMode("study");
+renderProgress();
+renderActiveView();
+</script>
+</body>
+</html>
